@@ -174,13 +174,6 @@
         <option value="Bank">Chuyển khoản ngân hàng</option>
       </select>
 
-      <div id="bankInfo" style="display:none; margin-top:10px;">
-        <p><strong>💳 Thông tin chuyển khoản:</strong></p>
-        <p>Ngân hàng: BIDV</p>
-        <p>Số tài khoản: <strong>7680087407</strong></p>
-        <p>Chủ tài khoản: <strong>TRẦN THỊ NGỌC TRÂM</strong></p>
-      </div>
-
       <div id="itemsContainer"></div>
       <button type="button" onclick="addItem()">➕ Thêm món</button>
 
@@ -224,9 +217,6 @@
     const method = document.getElementById("payment").value;
     const payBtn = document.getElementById("payBtn");
     const submitBtn = document.getElementById("submitBtn");
-    const bankInfo = document.getElementById("bankInfo");
-
-    bankInfo.style.display = method === "Bank" ? "block" : "none";
 
     if (method === "Bank") {
       payBtn.style.display = "inline-block";
@@ -554,7 +544,6 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
 	  <option value="hsbc">HSBC</option>
 	  <option value="standardchartered">Standard Chartered</option>
 	  <option value="anz">ANZ</option>
-
         </select>
 
         <button onclick="openBankApp()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer;">
