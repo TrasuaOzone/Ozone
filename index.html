@@ -583,6 +583,9 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
 });
 </script>
 <script>
+<script>
+<script>
+<script>
 // Gửi xác nhận đã chuyển khoản về Telegram
 function confirmPayment() {
   fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
@@ -617,11 +620,11 @@ function saveInvoiceImage() {
   });
 }
 
-// ✅ Mở ứng dụng ngân hàng bằng deep link VietQR
+// ✅ Mở ứng dụng ngân hàng qua trang trung gian VietQR
 function openBankApp() {
   const appCode = document.getElementById("bankSelect").value;
   if (!appCode) {
-    alert("Vui lòng chọn ngân hàng của bạn trước khi mở ứng dụng.");
+    alert("Vui lòng chọn ngân hàng của bạn trước khi tiếp tục.");
     return;
   }
 
@@ -632,9 +635,10 @@ function openBankApp() {
   const account = "7680087407";
   const name = "TRAN THI NGOC TRAM";
   const description = `Thanh toan ${orderId}`;
-  const url = `https://vietqr.io/pay?app=${appCode}&amount=${amount}&account=${account}&template=compact2&addInfo=${encodeURIComponent(description)}&accountName=${encodeURIComponent(name)}`;
 
-  window.location.href = url;
+  const url = `https://vietqr.io/pay?amount=${amount}&account=${account}&addInfo=${encodeURIComponent(description)}&accountName=${encodeURIComponent(name)}&app=${appCode}`;
+
+  window.open(url, "_blank");
 }
 </script>
 </body>
