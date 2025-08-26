@@ -202,7 +202,7 @@
       </div>
 
       <button type="button" id="payBtn" onclick="handlePayment()" style="display:none;">💳 Thanh toán</button>
-      <button type="submit" id="submitBtn" style="display:none;">📤 Gửi đơn</button>
+      <button type="submit" id="submitBtn">📤 Gửi đơn</button>
     </form>
   </div>
 <script>
@@ -215,20 +215,31 @@
     localStorage.setItem("darkMode", isDark);
     toggleBtn.innerHTML = isDark ? "☀️ Chế độ ban ngày" : "🌙 Chế độ ban đêm";
   }
+
+  // Khởi động chế độ ban đêm nếu đã lưu
   if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark-mode");
     document.getElementById("darkModeToggle").innerHTML = "☀️ Chế độ ban ngày";
   }
 
-  // Hiển thị nút thanh toán / gửi đơn
+  // Hiển thị nút phù hợp theo phương thức thanh toán
   function togglePaymentInfo() {
     const method = document.getElementById("payment").value;
+    const payBtn = document.getElementById("payBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (method === "Bank") {
+      payBtn.style.display = "inline-block";
+      submitBtn.style.display = "none";
+    } else {
+      payBtn.style.display = "none";
+      submitBtn.style.display = "inline-block";
+    }
+
     document.getElementById("bankInfo").style.display = method === "Bank" ? "block" : "none";
-    document.getElementById("payBtn").style.display = method === "Bank" ? "inline-block" : "none";
-    document.getElementById("submitBtn").style.display = method === "Bank" ? "none" : "inline-block";
   }
 
-  // Tạo mã đơn hàng
+  // Tạo mã đơn hàng duy nhất
   function generateOrderCode() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let code = '';
@@ -239,7 +250,7 @@
     return `#OZ-${code}${timestamp}`;
   }
 
-  // Lấy vị trí hiện tại
+  // Lấy vị trí hiện tại để điền địa chỉ
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -382,7 +393,7 @@
     "Topping bánh Flan": 8000,
     "Topping trân châu dừa": 5000,
     "Topping hạt đác": 10000,
-    "Topping rau cau phô mai": 5000,
+    "Topping rau câu phô mai": 5000,
     "Topping chân mèo": 7000,
     "Topping khoai dẻo": 6000,
     "Topping khúc bạch": 6000,
@@ -532,12 +543,11 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
 
   document.body.innerHTML = invoiceHTML;
 
-  // Gửi tin nhắn về Telegram
-  fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
+  fetch("https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: "-4846885719",
+      chat_id: "YOUR_CHAT_ID",
       text: message
     })
   });
@@ -580,24 +590,6 @@ function saveInvoiceImage() {
 </script>
 </body>
 </html>
-<script>
-// Lưu hóa đơn dưới dạng ảnh PNG
-function saveInvoiceImage() {
-  const invoice = document.getElementById("invoice");
-  if (!invoice) {
-    alert("Không tìm thấy hóa đơn để lưu.");
-    return;
-  }
-
-  html2canvas(invoice).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "hoa_don_ozone.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  }).catch(() => {
-    alert("❌ Không thể lưu hóa đơn. Vui lòng thử lại.");
-  });
-}
-</script>
+<!-- Kết thúc các script -->
 </body>
 </html>
