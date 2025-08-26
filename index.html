@@ -25,7 +25,6 @@
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      transition: background 0.3s;
     }
     body.dark-mode .container {
       background: #2c2c2c;
@@ -102,9 +101,6 @@
       background: #3a3a3a;
       border-color: #555;
     }
-    .item-block h4 {
-      margin-bottom: 10px;
-    }
     .remove-btn {
       background: #c0392b;
       margin-top: 10px;
@@ -144,7 +140,7 @@
   </style>
 </head>
 <body>
-  <button id="darkModeToggle" onclick="toggleDarkMode()" title="Chuyển chế độ sáng/tối">🌙 Chế độ ban đêm</button>
+  <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 Chế độ ban đêm</button>
 
   <div class="container">
     <div class="header">
@@ -489,7 +485,7 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
   `;
 
   if (payment === "Bank") {
-    const bank = "BIDV";
+    const bank = "bidv";
     const account = "7680087407";
     const nameAcc = "TRẦN THỊ NGỌC TRÂM";
     const description = `Thanh toan ${orderId}`;
@@ -498,55 +494,58 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
     invoiceHTML += `
       <div style="text-align:center; margin-top:30px;">
         <h3>💳 Quét mã QR để chuyển khoản</h3>
-        <img src="${qrURL}" alt="QR chuyển khoản" style="width:220px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.1);">
-        <p style="margin-top:10px; font-size:14px; color:#555;">
+        <img src="${qrURL}" alt="QR chuyển khoản" style="width:240px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.1); margin-bottom:10px;">
+        <p style="font-size:14px; color:#555;">
           Ngân hàng: BIDV<br>
           Số tài khoản: <strong>${account}</strong><br>
-          Chủ tài khoản: <strong>${nameAcc}</strong>
+          Chủ tài khoản: <strong>${nameAcc}</strong><br>
+          Nội dung chuyển khoản: <code>${description}</code>
         </p>
-        <p style="font-size:14px;">Nội dung chuyển khoản: <code>${description}</code></p>
+        <p style="font-size:13px; color:#888;">
+          👉 Nếu không mở được ứng dụng ngân hàng, hãy dùng <strong>Zalo</strong> để quét mã QR bên trên.<br>
+          📷 Vào Zalo > Quét mã > Chuyển khoản nhanh chóng
+        </p>
 
-        <!-- ✅ Tích hợp ngân hàng: chọn ngân hàng và mở app -->
         <label style="margin-top:15px;">Ngân hàng của bạn:</label>
         <select id="bankSelect" style="padding:8px; margin-top:6px; border-radius:6px;">
-          <option value="bidv">BIDV</option>
-          <option value="vcb">Vietcombank</option>
-          <option value="vietinbank">VietinBank</option>
-          <option value="agribank">Agribank</option>
-          <option value="mbbank">MBBank</option>
-          <option value="techcombank">Techcombank</option>
-          <option value="tpbank">TPBank</option>
-          <option value="vpbank">VPBank</option>
-          <option value="acb">ACB</option>
-          <option value="sacombank">Sacombank</option>
-          <option value="vib">VIB</option>
-          <option value="hdbank">HDBank</option>
-          <option value="ocb">OCB</option>
-          <option value="shb">SHB</option>
-          <option value="eximbank">Eximbank</option>
-          <option value="seabank">SeABank</option>
-          <option value="lienvietpostbank">LienVietPostBank</option>
-          <option value="bacabank">Bac A Bank</option>
-          <option value="vietabank">VietABank</option>
-          <option value="ncb">NCB</option>
-          <option value="vietbank">VietBank</option>
-          <option value="pgbank">PGBank</option>
-          <option value="baovietbank">BAOVIET Bank</option>
-          <option value="co-opbank">Co-opBank</option>
-          <option value="kienlongbank">KienlongBank</option>
-          <option value="namabank">Nam A Bank</option>
-          <option value="pvcombank">PVcomBank</option>
-          <option value="scb">SCB</option>
-          <option value="uob">UOB</option>
-          <option value="cimb">CIMB</option>
-          <option value="woori">Woori Bank</option>
-          <option value="hsbc">HSBC</option>
-          <option value="standardchartered">Standard Chartered</option>
-          <option value="anz">ANZ</option>
+          <option value="bidv">BIDV – Ngân hàng Đầu tư & Phát triển VN</option>
+          <option value="vcb">Vietcombank – Ngoại thương VN</option>
+          <option value="vietinbank">VietinBank – Công thương VN</option>
+          <option value="agribank">Agribank – Nông nghiệp & PTNT</option>
+          <option value="mbbank">MBBank – Quân đội</option>
+          <option value="techcombank">Techcombank – Kỹ thương VN</option>
+          <option value="tpbank">TPBank – Tiên Phong</option>
+          <option value="vpbank">VPBank – Việt Nam Thịnh Vượng</option>
+          <option value="acb">ACB – Á Châu</option>
+          <option value="sacombank">Sacombank – Sài Gòn Thương Tín</option>
+          <option value="vib">VIB – Quốc tế VN</option>
+          <option value="hdbank">HDBank – Phát triển TP.HCM</option>
+          <option value="ocb">OCB – Phương Đông</option>
+          <option value="shb">SHB – Sài Gòn – Hà Nội</option>
+          <option value="eximbank">Eximbank – Xuất nhập khẩu VN</option>
+          <option value="seabank">SeABank – Đông Nam Á</option>
+          <option value="lienvietpostbank">LienVietPostBank – Bưu điện Liên Việt</option>
+          <option value="bacabank">Bac A Bank – Bắc Á</option>
+          <option value="vietabank">VietABank – Việt Á</option>
+          <option value="ncb">NCB – Quốc Dân</option>
+          <option value="vietbank">VietBank – Việt Nam Thương Tín</option>
+          <option value="pgbank">PGBank – Xăng dầu Petrolimex</option>
+          <option value="baovietbank">BAOVIET Bank – Bảo Việt</option>
+          <option value="co-opbank">Co-opBank – Hợp tác xã VN</option>
+          <option value="kienlongbank">KienlongBank – Kiên Long</option>
+          <option value="namabank">Nam A Bank – Nam Á</option>
+          <option value="pvcombank">PVcomBank – Đại chúng VN</option>
+          <option value="scb">SCB – Sài Gòn</option>
+          <option value="uob">UOB – United Overseas Bank</option>
+          <option value="cimb">CIMB – Malaysia</option>
+          <option value="woori">Woori Bank – Hàn Quốc</option>
+          <option value="hsbc">HSBC – Anh Quốc</option>
+          <option value="standardchartered">Standard Chartered – Anh Quốc</option>
+          <option value="anz">ANZ – Úc</option>
         </select>
 
         <button onclick="openBankApp()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer;">
-          🔗 Mở ứng dụng ngân hàng
+          🔗 Mở trang VietQR ngân hàng
         </button>
 
         <button onclick="confirmPayment()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer;">
@@ -617,7 +616,7 @@ function saveInvoiceImage() {
   });
 }
 
-// ✅ Mở trang trung gian VietQR để chọn app ngân hàng
+// ✅ Mở trang VietQR trung gian để khách chọn app ngân hàng
 function openBankApp() {
   const appCode = document.getElementById("bankSelect").value;
   if (!appCode) {
