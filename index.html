@@ -195,7 +195,7 @@
           toppingTotal += toppings[t.value] || 0;
         }
         const productPrice = products[product] || 0;
-        total += productPrice * quantit + toppingTotaly;
+        total += (productPrice * quantity) + toppingTotal;
       });
       document.getElementById("totalDisplay").innerText = `Tổng tiền: ${total.toLocaleString()} đ`;
     }
@@ -241,4 +241,5 @@
   </script>
 </body>
 </html>
+
 
