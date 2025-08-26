@@ -154,6 +154,16 @@
   </div>
 
   <script>
+    function generateOrderCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      const timestamp = Date.now().toString().slice(-4);
+      return `#OZ-${code}${timestamp}`;
+    }
+
     const products = {
       "TS Kem trứng": 25000,
       "TS Kem trứng M": 20000,
@@ -208,7 +218,7 @@
       "Fulltopping thêm": 10000,
       "Topping kem cheese": 6000,
       "Topping TC đen": 5000,
-      "topping củ năng": 5000,
+      "Topping củ năng": 5000,
       "Topping củ môn": 5000
     };
     function addItem() {
@@ -320,7 +330,6 @@
         alert("Trình duyệt không hỗ trợ định vị.");
       }
     }
-
     document.getElementById("orderForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const data = new FormData(e.target);
@@ -329,6 +338,7 @@
       const method = data.get("method");
       const address = data.get("address") || "Nhận tại quán";
       const blocks = document.querySelectorAll(".item-block");
+
       let message = `🧋 Đơn mới từ khách:\n👤 ${name}\n📱 ${phone}\n🚚 Hình thức: ${method}\n📍 ${address}\n\n`;
 
       blocks.forEach((block, i) => {
@@ -344,6 +354,9 @@
         message += `🥤 Món ${i + 1}: ${product} x${quantity}\n➕ Topping: ${toppingsList}\n📝 Ghi chú: ${note}\n\n`;
       });
 
+      const orderId = generateOrderCode();
+      message += `🔖 Mã đơn hàng: ${orderId}`;
+
       fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -352,17 +365,19 @@
           text: message
         })
       }).then(() => {
-        alert("✅ Đơn hàng đã được gửi!");
-        e.target.reset();
-        document.getElementById("itemsContainer").innerHTML = "";
-        document.getElementById("totalDisplay").innerHTML = `
-          Tổng món: 0 đ<br>
-          Phí giao hàng: 0 đ<br>
-          <strong>Tổng cộng: 0 đ</strong>
+        document.body.innerHTML = `
+          <div style="max-width:600px; margin:80px auto; text-align:center; font-family:'Quicksand', sans-serif;">
+            <img src="images/logo.png" alt="Ozone Tea Logo" style="height:60px; margin-bottom:20px;">
+            <h2 style="color:#4b2e1e; font-size:28px;">🎉 Đơn hàng đã được ghi nhận!</h2>
+            <p style="font-size:18px; margin:10px 0;">Cảm ơn bạn đã đặt hàng tại <strong>Ozone Tea</strong>.</p>
+            <p style="font-size:16px; color:#555;">Mã đơn hàng của bạn:</p>
+            <div style="font-size:22px; font-weight:bold; color:#d2691e; margin-bottom:20px;">${orderId}</div>
+            <p style="font-size:14px; color:#888;">Chúng tôi sẽ liên hệ qua số điện thoại để xác nhận và giao hàng.</p>
+            <button onclick="location.reload()" style="margin-top:30px; padding:12px 24px; font-size:16px; background:#4b2e1e; color:white; border:none; border-radius:6px; cursor:pointer;">
+              Đặt thêm đơn khác
+            </button>
+          </div>
         `;
-        document.getElementById("pickupLocation").style.display = "none";
-        document.getElementById("addressBlock").style.display = "block";
-        addItem();
       }).catch(() => {
         alert("❌ Gửi thất bại. Vui lòng thử lại.");
       });
