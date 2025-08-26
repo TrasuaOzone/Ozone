@@ -87,7 +87,8 @@
       <button type="button" onclick="addItem()">➕ Thêm món</button>
 
       <label>Địa chỉ giao hàng:</label>
-      <textarea name="address" rows="3" required></textarea>
+      <textarea name="address" id="address" rows="3" required></textarea>
+      <button type="button" onclick="getLocation()">📍 Lấy vị trí hiện tại</button>
 
       <div id="totalDisplay">Tổng tiền: 0 đ</div>
 
@@ -188,16 +189,37 @@
       const blocks = document.querySelectorAll(".item-block");
       blocks.forEach(block => {
         const product = block.querySelector('[name="product"]').value;
-        const quantity = parseInt(block.querySelector('[name="quantity"]').value);
+        const quantity = parseInt(block.querySelector('[name="quantity"]').value) || 1;
         const toppingEls = block.querySelector('[name="topping"]').selectedOptions;
+
         let toppingTotal = 0;
         for (let t of toppingEls) {
-          toppingTotal += toppings[t.value] || 0;
+          const toppingPrice = toppings[t.value];
+          if (typeof toppingPrice === "number") {
+            toppingTotal += toppingPrice;
+          }
         }
+
         const productPrice = products[product] || 0;
         total += (productPrice * quantity) + toppingTotal;
       });
+
       document.getElementById("totalDisplay").innerText = `Tổng tiền: ${total.toLocaleString()} đ`;
+    }
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          const link = `https://www.google.com/maps?q=${lat},${lon}`;
+          document.getElementById("address").value = `Vị trí hiện tại: ${link}`;
+        }, function(error) {
+          alert("Không thể lấy vị trí. Vui lòng kiểm tra quyền truy cập.");
+        });
+      } else {
+        alert("Trình duyệt không hỗ trợ định vị.");
+      }
     }
 
     document.getElementById("orderForm").addEventListener("submit", function(e) {
@@ -241,5 +263,3 @@
   </script>
 </body>
 </html>
-
-
