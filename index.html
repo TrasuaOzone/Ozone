@@ -7,18 +7,48 @@
   <style>
     body {
       font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(to right, #fff7f0, #ffe4e1);
-      padding: 20px;
+      margin: 0;
+      padding: 0;
       color: #4b2e2e;
     }
-    h1 {
+    #menu {
+      background-image: url('https://drive.google.com/uc?export=view&id=1iF7Pua75ftn--hBkMLg9HyQ-VW0LHE_x');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      font-size: 28px;
-      margin-bottom: 20px;
+      color: white;
+    }
+    #menu h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    #menu p {
+      font-size: 20px;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    }
+    #menu button {
+      background: #d2691e;
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    #menu button:hover {
+      background: #a0522d;
     }
     .container {
       max-width: 500px;
-      margin: auto;
+      margin: 40px auto;
       background: #fff;
       padding: 25px;
       border-radius: 12px;
@@ -37,7 +67,7 @@
       border-radius: 6px;
       font-size: 14px;
     }
-    button {
+    button[type="submit"] {
       background: #d2691e;
       color: white;
       padding: 12px;
@@ -47,44 +77,59 @@
       margin-top: 20px;
       cursor: pointer;
     }
-    button:hover {
+    button[type="submit"]:hover {
       background: #a0522d;
     }
   </style>
 </head>
 <body>
-  <h1>🧋 Đặt hàng Ozone Tea</h1>
-  <div class="container">
-    <form id="orderForm">
-      <label>Tên khách hàng:</label>
-      <input type="text" name="name" required>
-
-      <label>Số điện thoại:</label>
-      <input type="tel" name="phone" required>
-
-      <label>Chọn món:</label>
-      <select name="drink">
-        <option>Trà sữa truyền thống</option>
-        <option>Trà sữa matcha</option>
-        <option>Trà sữa khoai môn</option>
-        <option>Trà đào cam sả</option>
-      </select>
-
-      <label>Topping:</label>
-      <select name="topping">
-        <option>Trân châu đen</option>
-        <option>Trân châu trắng</option>
-        <option>Thạch phô mai</option>
-        <option>Không topping</option>
-      </select>
-
-      <label>Địa chỉ giao hàng:</label>
-      <textarea name="address" rows="3" required></textarea>
-
-      <button type="submit">Gửi đơn ngay</button>
-    </form>
+  <!-- Menu với ảnh nền -->
+  <div id="menu">
+    <h1>🧋 Ozone Tea</h1>
+    <p>Trà sữa thơm ngon – Giao tận nơi</p>
+    <button onclick="showOrderForm()">Đặt hàng ngay</button>
   </div>
+
+  <!-- Form đặt hàng (ẩn ban đầu) -->
+  <div id="orderSection" style="display:none;">
+    <div class="container">
+      <form id="orderForm">
+        <label>Tên khách hàng:</label>
+        <input type="text" name="name" required>
+
+        <label>Số điện thoại:</label>
+        <input type="tel" name="phone" pattern="^(0|\\+84)[0-9]{9}$" required>
+
+        <label>Chọn món:</label>
+        <select name="drink">
+          <option>Trà sữa truyền thống</option>
+          <option>Trà sữa matcha</option>
+          <option>Trà sữa khoai môn</option>
+          <option>Trà đào cam sả</option>
+        </select>
+
+        <label>Topping:</label>
+        <select name="topping">
+          <option>Trân châu đen</option>
+          <option>Trân châu trắng</option>
+          <option>Thạch phô mai</option>
+          <option>Không topping</option>
+        </select>
+
+        <label>Địa chỉ giao hàng:</label>
+        <textarea name="address" rows="3" required></textarea>
+
+        <button type="submit">Gửi đơn ngay</button>
+      </form>
+    </div>
+  </div>
+
   <script>
+    function showOrderForm() {
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("orderSection").style.display = "block";
+    }
+
     document.getElementById("orderForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const data = new FormData(e.target);
