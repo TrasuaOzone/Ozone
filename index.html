@@ -306,7 +306,7 @@
     calculateTotal();
   }
 
-  // Tính tổng tiền
+  // Tính tổng tiền và xử lý giao diện
   function calculateTotal() {
     let totalItems = 0;
     const blocks = document.querySelectorAll(".item-block");
@@ -333,12 +333,16 @@
 
     const addressBlock = document.getElementById("addressBlock");
     const pickupLocation = document.getElementById("pickupLocation");
+    const addressField = document.getElementById("address");
+
     if (method === "Nhận tại quán") {
       addressBlock.style.display = "none";
       pickupLocation.style.display = "block";
+      addressField.removeAttribute("required"); // ✅ bỏ required
     } else {
       addressBlock.style.display = "block";
       pickupLocation.style.display = "none";
+      addressField.setAttribute("required", "required"); // ✅ thêm lại nếu cần
     }
 
     document.getElementById("totalDisplay").innerHTML = `
@@ -396,7 +400,7 @@ let orderId = "";
 
 function handlePayment() {
   orderId = generateOrderCode();
-  document.getElementById("submitBtn").click();
+  document.getElementById("orderForm").requestSubmit(); // ✅ gọi đúng form
 }
 
 document.getElementById("orderForm").addEventListener("submit", function(e) {
@@ -406,9 +410,12 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
   const phone = data.get("phone");
   const method = data.get("method");
   const payment = data.get("payment");
-  const address = data.get("address") || "Nhận tại quán";
-  const blocks = document.querySelectorAll(".item-block");
+  let address = data.get("address");
+  if (!address || method === "Nhận tại quán") {
+    address = "Nhận tại quán";
+  }
 
+  const blocks = document.querySelectorAll(".item-block");
   if (!orderId) orderId = generateOrderCode();
   const now = new Date();
   const dateStr = now.toLocaleDateString('vi-VN');
