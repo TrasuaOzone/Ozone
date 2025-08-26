@@ -23,6 +23,12 @@
     h1 {
       text-align: center;
       margin-bottom: 30px;
+      font-size: 24px;
+    }
+    h1 img {
+      height: 40px;
+      vertical-align: middle;
+      margin-right: 10px;
     }
     label {
       font-weight: bold;
@@ -64,17 +70,33 @@
       background: #c0392b;
       margin-top: 10px;
     }
+    .topping-group {
+      margin-top: 10px;
+    }
+    .topping-list div {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .topping-list input {
+      width: 60px;
+    }
     #totalDisplay {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       margin-top: 30px;
       text-align: right;
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🧋 Ozone Tea – Đặt hàng</h1>
+    <h1>
+      <img src="images/logo.png" alt="Ozone Tea Logo">
+      Ozone Tea – Đặt hàng
+    </h1>
     <form id="orderForm">
       <label>Tên khách hàng:</label>
       <input type="text" name="name" required>
@@ -82,15 +104,31 @@
       <label>Số điện thoại:</label>
       <input type="tel" name="phone" required>
 
+      <label>Hình thức nhận hàng:</label>
+      <select name="method" id="method" onchange="calculateTotal()" required>
+        <option value="Giao hàng tận nơi">Giao hàng tận nơi</option>
+        <option value="Nhận tại quán">Nhận tại quán</option>
+      </select>
+
       <div id="itemsContainer"></div>
 
       <button type="button" onclick="addItem()">➕ Thêm món</button>
 
-      <label>Địa chỉ giao hàng:</label>
-      <textarea name="address" id="address" rows="3" required></textarea>
-      <button type="button" onclick="getLocation()">📍 Lấy vị trí hiện tại</button>
+      <div id="addressBlock">
+        <label>Địa chỉ giao hàng:</label>
+        <textarea name="address" id="address" rows="3" required></textarea>
+        <button type="button" onclick="getLocation()">📍 Lấy vị trí hiện tại</button>
+      </div>
 
-      <div id="totalDisplay">Tổng tiền: 0 đ</div>
+      <div id="pickupLocation" style="display:none; margin-top:10px;">
+        📍 Vị trí quán: <a href="https://maps.app.goo.gl/naLNEFFzdPMoCo586" target="_blank">Xem trên Google Maps</a>
+      </div>
+
+      <div id="totalDisplay">
+        Tổng món: 0 đ<br>
+        Phí giao hàng: 0 đ<br>
+        <strong>Tổng cộng: 0 đ</strong>
+      </div>
 
       <button type="submit">Gửi đơn</button>
     </form>
@@ -168,9 +206,10 @@
         <label>Số lượng:</label>
         <input type="number" name="quantity" value="1" min="1" onchange="calculateTotal()">
         <label>Topping:</label>
-        <select name="topping" multiple onchange="calculateTotal()">
-          ${Object.entries(toppings).map(([name, price]) => `<option value="${name}">${name} – ${price.toLocaleString()} đ</option>`).join("")}
-        </select>
+        <div class="topping-group">
+          <button type="button" onclick="addTopping(this)">➕ Thêm topping</button>
+          <div class="topping-list"></div>
+        </div>
         <label>Ghi chú:</label>
         <textarea name="note" rows="2"></textarea>
         <button type="button" class="remove-btn" onclick="removeItem(this)">❌ Xóa món</button>
@@ -179,32 +218,73 @@
       calculateTotal();
     }
 
+    function addTopping(button) {
+      const toppingList = button.nextElementSibling;
+      const select = document.createElement("select");
+      select.innerHTML = `<option disabled selected>Chọn topping</option>` +
+        Object.entries(toppings).map(([name, price]) =>
+          `<option value="${name}">${name} – ${price.toLocaleString()} đ</option>`
+        ).join("");
+      select.onchange = function () {
+        const toppingName = this.value;
+        const toppingPrice = toppings[toppingName];
+        const toppingItem = document.createElement("div");
+        toppingItem.innerHTML = `
+          <span>${toppingName} (${toppingPrice.toLocaleString()} đ)</span>
+          x <input type="number" value="1" min="1" onchange="calculateTotal()">
+          <button type="button" onclick="this.parentElement.remove(); calculateTotal()">❌</button>
+        `;
+        toppingList.appendChild(toppingItem);
+        this.remove();
+        calculateTotal();
+      };
+      toppingList.appendChild(select);
+    }
+
     function removeItem(btn) {
       btn.parentElement.remove();
       calculateTotal();
     }
 
     function calculateTotal() {
-      let total = 0;
+      let totalItems = 0;
       const blocks = document.querySelectorAll(".item-block");
       blocks.forEach(block => {
         const product = block.querySelector('[name="product"]').value;
         const quantity = parseInt(block.querySelector('[name="quantity"]').value) || 1;
-        const toppingEls = block.querySelector('[name="topping"]').selectedOptions;
 
         let toppingTotal = 0;
-        for (let t of toppingEls) {
-          const toppingPrice = toppings[t.value];
-          if (typeof toppingPrice === "number") {
-            toppingTotal += toppingPrice;
-          }
-        }
+        const toppingItems = block.querySelectorAll(".topping-list > div");
+        toppingItems.forEach(item => {
+          const name = item.querySelector("span").innerText.split(" (")[0];
+          const qty = parseInt(item.querySelector("input").value) || 1;
+          const price = toppings[name] || 0;
+          toppingTotal += price * qty;
+        });
 
         const productPrice = products[product] || 0;
-        total += (productPrice * quantity) + toppingTotal;
+        totalItems += (productPrice * quantity) + toppingTotal;
       });
 
-      document.getElementById("totalDisplay").innerText = `Tổng tiền: ${total.toLocaleString()} đ`;
+      const method = document.getElementById("method").value;
+      const deliveryFee = method === "Giao hàng tận nơi" ? 5000 : 0;
+      const total = totalItems + deliveryFee;
+
+      const addressBlock = document.getElementById("addressBlock");
+      const pickupLocation = document.getElementById("pickupLocation");
+      if (method === "Nhận tại quán") {
+        addressBlock.style.display = "none";
+        pickupLocation.style.display = "block";
+      } else {
+        addressBlock.style.display = "block";
+        pickupLocation.style.display = "none";
+      }
+
+      document.getElementById("totalDisplay").innerHTML = `
+        Tổng món: ${totalItems.toLocaleString()} đ<br>
+        Phí giao hàng: ${deliveryFee.toLocaleString()} đ<br>
+        <strong>Tổng cộng: ${total.toLocaleString()} đ</strong>
+      `;
     }
 
     function getLocation() {
@@ -227,20 +307,25 @@
       const data = new FormData(e.target);
       const name = data.get("name");
       const phone = data.get("phone");
-      const address = data.get("address");
+      const method = data.get("method");
+      const address = data.get("address") || "Nhận tại quán";
       const blocks = document.querySelectorAll(".item-block");
-      let message = `🧋 Đơn mới từ khách:\n👤 ${name}\n📱 ${phone}\n📍 ${address}\n\n`;
+      let message = `🧋 Đơn mới từ khách:\n👤 ${name}\n📱 ${phone}\n🚚 Hình thức: ${method}\n📍 ${address}\n\n`;
 
       blocks.forEach((block, i) => {
         const product = block.querySelector('[name="product"]').value;
         const quantity = block.querySelector('[name="quantity"]').value;
-        const toppingEls = block.querySelector('[name="topping"]').selectedOptions;
-        const toppingsList = Array.from(toppingEls).map(t => t.value).join(", ") || "Không";
+        const toppingItems = block.querySelectorAll(".topping-list > div");
+        const toppingsList = Array.from(toppingItems).map(item => {
+          const name = item.querySelector("span").innerText.split(" (")[0];
+          const qty = item.querySelector("input").value;
+          return `${name} x${qty}`;
+        }).join(", ") || "Không";
         const note = block.querySelector('[name="note"]').value || "—";
         message += `🥤 Món ${i + 1}: ${product} x${quantity}\n➕ Topping: ${toppingsList}\n📝 Ghi chú: ${note}\n\n`;
       });
 
-      fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
+      fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -251,14 +336,19 @@
         alert("✅ Đơn hàng đã được gửi!");
         e.target.reset();
         document.getElementById("itemsContainer").innerHTML = "";
-        document.getElementById("totalDisplay").innerText = "Tổng tiền: 0 đ";
-        addItem(); // Khởi tạo lại 1 món sau khi gửi
+        document.getElementById("totalDisplay").innerHTML = `
+          Tổng món: 0 đ<br>
+          Phí giao hàng: 0 đ<br>
+          <strong>Tổng cộng: 0 đ</strong>
+        `;
+        document.getElementById("pickupLocation").style.display = "none";
+        document.getElementById("addressBlock").style.display = "block";
+        addItem();
       }).catch(() => {
         alert("❌ Gửi thất bại. Vui lòng thử lại.");
       });
     });
 
-    // Khởi tạo với 1 món đầu tiên
     addItem();
   </script>
 </body>
