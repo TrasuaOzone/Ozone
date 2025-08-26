@@ -477,7 +477,6 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
       </div>
     `;
   });
-
   const deliveryFee = method === "Giao hàng tận nơi" ? 5000 : 0;
   const total = totalItems + deliveryFee;
 
@@ -511,39 +510,39 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
         <label style="margin-top:15px;">Ngân hàng của bạn:</label>
         <select id="bankSelect" style="padding:8px; margin-top:6px; border-radius:6px;">
           <option value="bidv">BIDV</option>
-	  <option value="vcb">Vietcombank</option>
-	  <option value="vietinbank">VietinBank</option>
-	  <option value="agribank">Agribank</option>
-	  <option value="mbbank">MBBank</option>
-	  <option value="techcombank">Techcombank</option>
-	  <option value="tpbank">TPBank</option>
-	  <option value="vpbank">VPBank</option>
-	  <option value="acb">ACB</option>
-	  <option value="sacombank">Sacombank</option>
-	  <option value="vib">VIB</option>
-	  <option value="hdbank">HDBank</option>
-	  <option value="ocb">OCB</option>
-	  <option value="shb">SHB</option>
-	  <option value="eximbank">Eximbank</option>
-	  <option value="seabank">SeABank</option>
-	  <option value="lienvietpostbank">LienVietPostBank</option>
-	  <option value="bacabank">Bac A Bank</option>
-	  <option value="vietabank">VietABank</option>
-	  <option value="ncb">NCB</option>
-	  <option value="vietbank">VietBank</option>
-	  <option value="pgbank">PGBank</option>
-	  <option value="baovietbank">BAOVIET Bank</option>
-	  <option value="co-opbank">Co-opBank</option>
-	  <option value="kienlongbank">KienlongBank</option>
-	  <option value="namabank">Nam A Bank</option>
-	  <option value="pvcombank">PVcomBank</option>
-	  <option value="scb">SCB</option>
-	  <option value="uob">UOB</option>
-	  <option value="cimb">CIMB</option>
-	  <option value="woori">Woori Bank</option>
-	  <option value="hsbc">HSBC</option>
-	  <option value="standardchartered">Standard Chartered</option>
-	  <option value="anz">ANZ</option>
+          <option value="vcb">Vietcombank</option>
+          <option value="vietinbank">VietinBank</option>
+          <option value="agribank">Agribank</option>
+          <option value="mbbank">MBBank</option>
+          <option value="techcombank">Techcombank</option>
+          <option value="tpbank">TPBank</option>
+          <option value="vpbank">VPBank</option>
+          <option value="acb">ACB</option>
+          <option value="sacombank">Sacombank</option>
+          <option value="vib">VIB</option>
+          <option value="hdbank">HDBank</option>
+          <option value="ocb">OCB</option>
+          <option value="shb">SHB</option>
+          <option value="eximbank">Eximbank</option>
+          <option value="seabank">SeABank</option>
+          <option value="lienvietpostbank">LienVietPostBank</option>
+          <option value="bacabank">Bac A Bank</option>
+          <option value="vietabank">VietABank</option>
+          <option value="ncb">NCB</option>
+          <option value="vietbank">VietBank</option>
+          <option value="pgbank">PGBank</option>
+          <option value="baovietbank">BAOVIET Bank</option>
+          <option value="co-opbank">Co-opBank</option>
+          <option value="kienlongbank">KienlongBank</option>
+          <option value="namabank">Nam A Bank</option>
+          <option value="pvcombank">PVcomBank</option>
+          <option value="scb">SCB</option>
+          <option value="uob">UOB</option>
+          <option value="cimb">CIMB</option>
+          <option value="woori">Woori Bank</option>
+          <option value="hsbc">HSBC</option>
+          <option value="standardchartered">Standard Chartered</option>
+          <option value="anz">ANZ</option>
         </select>
 
         <button onclick="openBankApp()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer;">
@@ -582,11 +581,9 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
   });
 });
 </script>
+
 <script>
-<script>
-<script>
-<script>
-// Gửi xác nhận đã chuyển khoản về Telegram
+// ✅ Gửi xác nhận đã chuyển khoản về Telegram
 function confirmPayment() {
   fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
     method: "POST",
@@ -602,7 +599,7 @@ function confirmPayment() {
   });
 }
 
-// Lưu hóa đơn dưới dạng ảnh PNG
+// ✅ Lưu hóa đơn dưới dạng ảnh PNG
 function saveInvoiceImage() {
   const invoice = document.getElementById("invoice");
   if (!invoice) {
@@ -620,7 +617,7 @@ function saveInvoiceImage() {
   });
 }
 
-// ✅ Mở ứng dụng ngân hàng qua trang trung gian VietQR
+// ✅ Mở trang trung gian VietQR để chọn app ngân hàng
 function openBankApp() {
   const appCode = document.getElementById("bankSelect").value;
   if (!appCode) {
@@ -638,7 +635,7 @@ function openBankApp() {
 
   const url = `https://vietqr.io/pay?amount=${amount}&account=${account}&addInfo=${encodeURIComponent(description)}&accountName=${encodeURIComponent(name)}&app=${appCode}`;
 
-  window.open(url, "_blank");
+  window.location.href = url;
 }
 </script>
 </body>
