@@ -543,11 +543,11 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
 
   document.body.innerHTML = invoiceHTML;
 
-  fetch("https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage", {
+  fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: "YOUR_CHAT_ID",
+      chat_id: "-4846885719",
       text: message
     })
   });
@@ -593,3 +593,4 @@ function saveInvoiceImage() {
 <!-- Kết thúc các script -->
 </body>
 </html>
+
