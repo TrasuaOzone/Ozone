@@ -182,7 +182,6 @@
       </div>
 
       <div id="itemsContainer"></div>
-
       <button type="button" onclick="addItem()">➕ Thêm món</button>
 
       <div id="addressBlock">
@@ -205,8 +204,8 @@
       <button type="submit" id="submitBtn">📤 Gửi đơn</button>
     </form>
   </div>
+
 <script>
-  // Chuyển chế độ ban đêm / ban ngày
   function toggleDarkMode() {
     const body = document.body;
     const toggleBtn = document.getElementById("darkModeToggle");
@@ -216,17 +215,18 @@
     toggleBtn.innerHTML = isDark ? "☀️ Chế độ ban ngày" : "🌙 Chế độ ban đêm";
   }
 
-  // Khởi động chế độ ban đêm nếu đã lưu
   if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark-mode");
     document.getElementById("darkModeToggle").innerHTML = "☀️ Chế độ ban ngày";
   }
 
-  // Hiển thị nút phù hợp theo phương thức thanh toán
   function togglePaymentInfo() {
     const method = document.getElementById("payment").value;
     const payBtn = document.getElementById("payBtn");
     const submitBtn = document.getElementById("submitBtn");
+    const bankInfo = document.getElementById("bankInfo");
+
+    bankInfo.style.display = method === "Bank" ? "block" : "none";
 
     if (method === "Bank") {
       payBtn.style.display = "inline-block";
@@ -235,11 +235,8 @@
       payBtn.style.display = "none";
       submitBtn.style.display = "inline-block";
     }
-
-    document.getElementById("bankInfo").style.display = method === "Bank" ? "block" : "none";
   }
 
-  // Tạo mã đơn hàng duy nhất
   function generateOrderCode() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let code = '';
@@ -250,7 +247,6 @@
     return `#OZ-${code}${timestamp}`;
   }
 
-  // Lấy vị trí hiện tại để điền địa chỉ
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -520,13 +516,57 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
           Chủ tài khoản: <strong>${nameAcc}</strong>
         </p>
         <p style="font-size:14px;">Nội dung chuyển khoản: <code>${description}</code></p>
+
+        <!-- ✅ Tích hợp ngân hàng: chọn ngân hàng và mở app -->
+        <label style="margin-top:15px;">Ngân hàng của bạn:</label>
+        <select id="bankSelect" style="padding:8px; margin-top:6px; border-radius:6px;">
+          <option value="bidv">BIDV</option>
+	  <option value="vcb">Vietcombank</option>
+	  <option value="vietinbank">VietinBank</option>
+	  <option value="agribank">Agribank</option>
+	  <option value="mbbank">MBBank</option>
+	  <option value="techcombank">Techcombank</option>
+	  <option value="tpbank">TPBank</option>
+	  <option value="vpbank">VPBank</option>
+	  <option value="acb">ACB</option>
+	  <option value="sacombank">Sacombank</option>
+	  <option value="vib">VIB</option>
+	  <option value="hdbank">HDBank</option>
+	  <option value="ocb">OCB</option>
+	  <option value="shb">SHB</option>
+	  <option value="eximbank">Eximbank</option>
+	  <option value="seabank">SeABank</option>
+	  <option value="lienvietpostbank">LienVietPostBank</option>
+	  <option value="bacabank">Bac A Bank</option>
+	  <option value="vietabank">VietABank</option>
+	  <option value="ncb">NCB</option>
+	  <option value="vietbank">VietBank</option>
+	  <option value="pgbank">PGBank</option>
+	  <option value="baovietbank">BAOVIET Bank</option>
+	  <option value="co-opbank">Co-opBank</option>
+	  <option value="kienlongbank">KienlongBank</option>
+	  <option value="namabank">Nam A Bank</option>
+	  <option value="pvcombank">PVcomBank</option>
+	  <option value="scb">SCB</option>
+	  <option value="uob">UOB</option>
+	  <option value="cimb">CIMB</option>
+	  <option value="woori">Woori Bank</option>
+	  <option value="hsbc">HSBC</option>
+	  <option value="standardchartered">Standard Chartered</option>
+	  <option value="anz">ANZ</option>
+
+        </select>
+
+        <button onclick="openBankApp()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer;">
+          🔗 Mở ứng dụng ngân hàng
+        </button>
+
         <button onclick="confirmPayment()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer;">
           ✅ Tôi đã chuyển khoản
         </button>
       </div>
     `;
   }
-
   invoiceHTML += `
     <hr style="margin:20px 0;">
     <p style="text-align:center; font-size:14px; color:#888;">Cảm ơn bạn đã đặt hàng tại Ozone Tea. Chúng tôi sẽ liên hệ để xác nhận đơn hàng.</p>
@@ -587,10 +627,26 @@ function saveInvoiceImage() {
     alert("❌ Không thể lưu hóa đơn. Vui lòng thử lại.");
   });
 }
+
+// ✅ Mở ứng dụng ngân hàng bằng deep link VietQR
+function openBankApp() {
+  const appCode = document.getElementById("bankSelect").value;
+  if (!appCode) {
+    alert("Vui lòng chọn ngân hàng của bạn trước khi mở ứng dụng.");
+    return;
+  }
+
+  const totalText = document.getElementById("totalDisplay").innerText;
+  const match = totalText.match(/Tổng cộng: ([\d\.]+) đ/);
+  const amount = match ? match[1].replace(/\./g, "") : "0";
+
+  const account = "7680087407";
+  const name = "TRAN THI NGOC TRAM";
+  const description = `Thanh toan ${orderId}`;
+  const url = `https://vietqr.io/pay?app=${appCode}&amount=${amount}&account=${account}&template=compact2&addInfo=${encodeURIComponent(description)}&accountName=${encodeURIComponent(name)}`;
+
+  window.location.href = url;
+}
 </script>
 </body>
 </html>
-<!-- Kết thúc các script -->
-</body>
-</html>
-
