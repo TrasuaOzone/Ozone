@@ -1,8 +1,10 @@
 {
   "name": "Ở Đây Có Gì",
   "short_name": "ODCG",
-  "start_url": "index.html",
+  "description": "Nền tảng kết nối cộng đồng địa phương — nơi người dân chia sẻ, tìm kiếm và phục vụ lẫn nhau.",
+  "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#fff3e6",
   "theme_color": "#a0522d",
   "icons": [
@@ -16,5 +18,9 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "lang": "vi",
+  "scope": "./",
+  "id": "https://trasuaozone.github.io/Ozone/",
+  "prefer_related_applications": false
 }
