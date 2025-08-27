@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đặt dịch vụ – Ở Đây Có Gì</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: #fff3e6;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #1e1e1e;
+      color: #f0f0f0;
+    }
+    #toggleMode {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      padding: 10px 16px;
+      font-size: 14px;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .container {
+      max-width: 700px;
+      margin: 80px auto;
+      padding: 40px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    body.dark .container {
+      background: rgba(40,40,40,0.95);
+    }
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      color: #a0522d;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+      color: #000;
+    }
+    body.dark input,
+    body.dark textarea {
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+    }
+    button[type="submit"] {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background: #0056b3;
+    }
+    #invoice {
+      margin-top: 40px;
+      padding: 20px;
+      background: #fefefe;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      display: none;
+    }
+    body.dark #invoice {
+      background: #2c2c2c;
+      color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <button id="toggleMode">🌙 Chuyển chế độ</button>
+
+  <div class="container">
+    <h1>Đặt dịch vụ cộng đồng</h1>
+    <form id="serviceForm">
+      <label>Dịch vụ cần sử dụng:</label>
+      <input type="text" name="service" placeholder="VD: Dọn nhà, Sửa điện nước..." required>
+
+      <label>Họ tên:</label>
+      <input type="text" name="name" required>
+
+      <label>Số điện thoại:</label>
+      <input type="tel" name="phone" required>
+
+      <label>Địa chỉ:</label>
+      <input type="text" name="address" required>
+
+      <label>Ghi chú thêm:</label>
+      <textarea name="note" rows="3"></textarea>
+
+      <button type="submit">📤 Gửi yêu cầu</button>
+    </form>
+
+    <div id="invoice"></div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById("toggleMode");
+    toggleBtn.onclick = () => {
+      document.body.classList.toggle("dark");
+      toggleBtn.innerHTML = document.body.classList.contains("dark")
+        ? "☀️ Chế độ ban ngày"
+        : "🌙 Chuyển chế độ";
+    };
+
+    document.getElementById("serviceForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = this;
+      const formData = new FormData(form);
+      const orderCode = generateOrderCode();
+      formData.append("orderCode", orderCode);
+
+      fetch("https://script.google.com/macros/s/AKfycbxDx92X2olssSjYd-V9qwECcLB6kjTC6Wfrhv0w4HbT1tD8Z1WnnuekFWOLmynildU_/exec", {
+        method: "POST",
+        body: formData
+      })
+      .then(() => {
+        const invoice = document.getElementById("invoice");
+        invoice.style.display = "block";
+        invoice.innerHTML = `
+          <h3>🧾 HÓA ĐƠN DỊCH VỤ</h3>
+          <p><strong>Mã đơn hàng:</strong> ${orderCode}</p>
+          <p><strong>Dịch vụ:</strong> ${formData.get("service")}</p>
+          <p><strong>Khách hàng:</strong> ${formData.get("name")}</p>
+          <p><strong>Số điện thoại:</strong> ${formData.get("phone")}</p>
+          <p><strong>Địa chỉ:</strong> ${formData.get("address")}</p>
+          <p><strong>Ghi chú:</strong> ${formData.get("note") || "Không có"}</p>
+          <p><strong>Thời gian gửi:</strong> ${new Date().toLocaleString("vi-VN")}</p>
+        `;
+        form.reset();
+      })
+      .catch(() => {
+        alert("❌ Gửi thất bại. Vui lòng kiểm tra lại kết nối hoặc quyền truy cập.");
+      });
+
+      function generateOrderCode() {
+        const timestamp = Date.now();
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let prefix = '';
+        for (let i = 0; i < 3; i++) {
+          prefix += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return `#OZDV-${prefix}${timestamp}`;
+      }
+    });
+  </script>
+</body>
+</html>
