@@ -172,15 +172,20 @@
       </button>
     </div>
   </div>
+ <script>
+  const toggleBtn = document.getElementById("toggleMode");
+  toggleBtn.onclick = () => {
+    document.body.classList.toggle("dark");
+    toggleBtn.innerHTML = document.body.classList.contains("dark")
+      ? "☀️ Chế độ ban ngày"
+      : "🌙 Chuyển chế độ";
+  };
 
-  <script>
-    const toggleBtn = document.getElementById("toggleMode");
-    toggleBtn.onclick = () => {
-      document.body.classList.toggle("dark");
-      toggleBtn.innerHTML = document.body.classList.contains("dark")
-        ? "☀️ Chế độ ban ngày"
-        : "🌙 Chuyển chế độ";
-    };
-  </script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("✅ Service Worker đã được đăng ký"))
+      .catch(err => console.error("❌ Lỗi Service Worker:", err));
+  }
+</script>
 </body>
 </html>
