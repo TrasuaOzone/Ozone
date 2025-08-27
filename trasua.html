@@ -25,7 +25,6 @@
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      transition: background 0.3s;
     }
     body.dark-mode .container {
       background: #2c2c2c;
@@ -102,9 +101,6 @@
       background: #3a3a3a;
       border-color: #555;
     }
-    .item-block h4 {
-      margin-bottom: 10px;
-    }
     .remove-btn {
       background: #c0392b;
       margin-top: 10px;
@@ -144,7 +140,7 @@
   </style>
 </head>
 <body>
-  <button id="darkModeToggle" onclick="toggleDarkMode()" title="Chuyển chế độ sáng/tối">🌙 Chế độ ban đêm</button>
+  <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 Chế độ ban đêm</button>
 
   <div class="container">
     <div class="header">
@@ -174,15 +170,7 @@
         <option value="Bank">Chuyển khoản ngân hàng</option>
       </select>
 
-      <div id="bankInfo" style="display:none; margin-top:10px;">
-        <p><strong>💳 Thông tin chuyển khoản:</strong></p>
-        <p>Ngân hàng: BIDV</p>
-        <p>Số tài khoản: <strong>7680087407</strong></p>
-        <p>Chủ tài khoản: <strong>TRẦN THỊ NGỌC TRÂM</strong></p>
-      </div>
-
       <div id="itemsContainer"></div>
-
       <button type="button" onclick="addItem()">➕ Thêm món</button>
 
       <div id="addressBlock">
@@ -205,8 +193,8 @@
       <button type="submit" id="submitBtn">📤 Gửi đơn</button>
     </form>
   </div>
+
 <script>
-  // Chuyển chế độ ban đêm / ban ngày
   function toggleDarkMode() {
     const body = document.body;
     const toggleBtn = document.getElementById("darkModeToggle");
@@ -216,13 +204,11 @@
     toggleBtn.innerHTML = isDark ? "☀️ Chế độ ban ngày" : "🌙 Chế độ ban đêm";
   }
 
-  // Khởi động chế độ ban đêm nếu đã lưu
   if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark-mode");
     document.getElementById("darkModeToggle").innerHTML = "☀️ Chế độ ban ngày";
   }
 
-  // Hiển thị nút phù hợp theo phương thức thanh toán
   function togglePaymentInfo() {
     const method = document.getElementById("payment").value;
     const payBtn = document.getElementById("payBtn");
@@ -235,11 +221,8 @@
       payBtn.style.display = "none";
       submitBtn.style.display = "inline-block";
     }
-
-    document.getElementById("bankInfo").style.display = method === "Bank" ? "block" : "none";
   }
 
-  // Tạo mã đơn hàng duy nhất
   function generateOrderCode() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let code = '';
@@ -250,7 +233,6 @@
     return `#OZ-${code}${timestamp}`;
   }
 
-  // Lấy vị trí hiện tại để điền địa chỉ
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -324,7 +306,7 @@
     calculateTotal();
   }
 
-  // Tính tổng tiền
+  // Tính tổng tiền và xử lý giao diện
   function calculateTotal() {
     let totalItems = 0;
     const blocks = document.querySelectorAll(".item-block");
@@ -351,12 +333,16 @@
 
     const addressBlock = document.getElementById("addressBlock");
     const pickupLocation = document.getElementById("pickupLocation");
+    const addressField = document.getElementById("address");
+
     if (method === "Nhận tại quán") {
       addressBlock.style.display = "none";
       pickupLocation.style.display = "block";
+      addressField.removeAttribute("required"); // ✅ bỏ required
     } else {
       addressBlock.style.display = "block";
       pickupLocation.style.display = "none";
+      addressField.setAttribute("required", "required"); // ✅ thêm lại nếu cần
     }
 
     document.getElementById("totalDisplay").innerHTML = `
@@ -414,7 +400,7 @@ let orderId = "";
 
 function handlePayment() {
   orderId = generateOrderCode();
-  document.getElementById("submitBtn").click();
+  document.getElementById("orderForm").requestSubmit(); // ✅ gọi đúng form
 }
 
 document.getElementById("orderForm").addEventListener("submit", function(e) {
@@ -424,9 +410,12 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
   const phone = data.get("phone");
   const method = data.get("method");
   const payment = data.get("payment");
-  const address = data.get("address") || "Nhận tại quán";
-  const blocks = document.querySelectorAll(".item-block");
+  let address = data.get("address");
+  if (!address || method === "Nhận tại quán") {
+    address = "Nhận tại quán";
+  }
 
+  const blocks = document.querySelectorAll(".item-block");
   if (!orderId) orderId = generateOrderCode();
   const now = new Date();
   const dateStr = now.toLocaleDateString('vi-VN');
@@ -491,7 +480,6 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
       </div>
     `;
   });
-
   const deliveryFee = method === "Giao hàng tận nơi" ? 5000 : 0;
   const total = totalItems + deliveryFee;
 
@@ -504,7 +492,7 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
   `;
 
   if (payment === "Bank") {
-    const bank = "BIDV";
+    const bank = "bidv";
     const account = "7680087407";
     const nameAcc = "TRẦN THỊ NGỌC TRÂM";
     const description = `Thanh toan ${orderId}`;
@@ -513,20 +501,66 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
     invoiceHTML += `
       <div style="text-align:center; margin-top:30px;">
         <h3>💳 Quét mã QR để chuyển khoản</h3>
-        <img src="${qrURL}" alt="QR chuyển khoản" style="width:220px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.1);">
-        <p style="margin-top:10px; font-size:14px; color:#555;">
+        <img src="${qrURL}" alt="QR chuyển khoản" style="width:240px; border-radius:12px; box-shadow:0 0 8px rgba(0,0,0,0.1); margin-bottom:10px;">
+        <p style="font-size:14px; color:#555;">
           Ngân hàng: BIDV<br>
           Số tài khoản: <strong>${account}</strong><br>
-          Chủ tài khoản: <strong>${nameAcc}</strong>
+          Chủ tài khoản: <strong>${nameAcc}</strong><br>
+          Nội dung chuyển khoản: <code>${description}</code>
         </p>
-        <p style="font-size:14px;">Nội dung chuyển khoản: <code>${description}</code></p>
+        <p style="font-size:13px; color:#888;">
+          👉 Nếu không mở được ứng dụng ngân hàng, hãy dùng <strong>Zalo</strong> để quét mã QR bên trên.<br>
+          📷 Vào Zalo > Quét mã > Chuyển khoản nhanh chóng
+        </p>
+
+        <label style="margin-top:15px;">Ngân hàng của bạn:</label>
+        <select id="bankSelect" style="padding:8px; margin-top:6px; border-radius:6px;">
+          <option value="bidv">BIDV – Ngân hàng Đầu tư & Phát triển VN</option>
+          <option value="vcb">Vietcombank – Ngoại thương VN</option>
+          <option value="vietinbank">VietinBank – Công thương VN</option>
+          <option value="agribank">Agribank – Nông nghiệp & PTNT</option>
+          <option value="mbbank">MBBank – Quân đội</option>
+          <option value="techcombank">Techcombank – Kỹ thương VN</option>
+          <option value="tpbank">TPBank – Tiên Phong</option>
+          <option value="vpbank">VPBank – Việt Nam Thịnh Vượng</option>
+          <option value="acb">ACB – Á Châu</option>
+          <option value="sacombank">Sacombank – Sài Gòn Thương Tín</option>
+          <option value="vib">VIB – Quốc tế VN</option>
+          <option value="hdbank">HDBank – Phát triển TP.HCM</option>
+          <option value="ocb">OCB – Phương Đông</option>
+          <option value="shb">SHB – Sài Gòn – Hà Nội</option>
+          <option value="eximbank">Eximbank – Xuất nhập khẩu VN</option>
+          <option value="seabank">SeABank – Đông Nam Á</option>
+          <option value="lienvietpostbank">LienVietPostBank – Bưu điện Liên Việt</option>
+          <option value="bacabank">Bac A Bank – Bắc Á</option>
+          <option value="vietabank">VietABank – Việt Á</option>
+          <option value="ncb">NCB – Quốc Dân</option>
+          <option value="vietbank">VietBank – Việt Nam Thương Tín</option>
+          <option value="pgbank">PGBank – Xăng dầu Petrolimex</option>
+          <option value="baovietbank">BAOVIET Bank – Bảo Việt</option>
+          <option value="co-opbank">Co-opBank – Hợp tác xã VN</option>
+          <option value="kienlongbank">KienlongBank – Kiên Long</option>
+          <option value="namabank">Nam A Bank – Nam Á</option>
+          <option value="pvcombank">PVcomBank – Đại chúng VN</option>
+          <option value="scb">SCB – Sài Gòn</option>
+          <option value="uob">UOB – United Overseas Bank</option>
+          <option value="cimb">CIMB – Malaysia</option>
+          <option value="woori">Woori Bank – Hàn Quốc</option>
+          <option value="hsbc">HSBC – Anh Quốc</option>
+          <option value="standardchartered">Standard Chartered – Anh Quốc</option>
+          <option value="anz">ANZ – Úc</option>
+        </select>
+
+        <button onclick="openBankApp()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer;">
+          🔗 Mở trang VietQR ngân hàng
+        </button>
+
         <button onclick="confirmPayment()" style="margin-top:10px; padding:10px 20px; font-size:16px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer;">
           ✅ Tôi đã chuyển khoản
         </button>
       </div>
     `;
   }
-
   invoiceHTML += `
     <hr style="margin:20px 0;">
     <p style="text-align:center; font-size:14px; color:#888;">Cảm ơn bạn đã đặt hàng tại Ozone Tea. Chúng tôi sẽ liên hệ để xác nhận đơn hàng.</p>
@@ -543,18 +577,19 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
 
   document.body.innerHTML = invoiceHTML;
 
-  fetch("https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage", {
+  fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: "YOUR_CHAT_ID",
+      chat_id: "-4846885719",
       text: message
     })
   });
 });
 </script>
+
 <script>
-// Gửi xác nhận đã chuyển khoản về Telegram
+// ✅ Gửi xác nhận đã chuyển khoản về Telegram
 function confirmPayment() {
   fetch("https://api.telegram.org/bot8430364195:AAHniNvZGsGvSnRiww8SE5H1eAgZLwW8CIE/sendMessage", {
     method: "POST",
@@ -570,7 +605,7 @@ function confirmPayment() {
   });
 }
 
-// Lưu hóa đơn dưới dạng ảnh PNG
+// ✅ Lưu hóa đơn dưới dạng ảnh PNG
 function saveInvoiceImage() {
   const invoice = document.getElementById("invoice");
   if (!invoice) {
@@ -587,9 +622,28 @@ function saveInvoiceImage() {
     alert("❌ Không thể lưu hóa đơn. Vui lòng thử lại.");
   });
 }
+
+// ✅ Mở trang VietQR trung gian để khách chọn app ngân hàng
+function openBankApp() {
+  const appCode = document.getElementById("bankSelect").value;
+  if (!appCode) {
+    alert("Vui lòng chọn ngân hàng của bạn trước khi tiếp tục.");
+    return;
+  }
+
+  const totalText = document.getElementById("totalDisplay").innerText;
+  const match = totalText.match(/Tổng cộng: ([\d\.]+) đ/);
+  const amount = match ? match[1].replace(/\./g, "") : "0";
+
+  const account = "7680087407";
+  const name = "TRAN THI NGOC TRAM";
+  const description = `Thanh toan ${orderId}`;
+
+  const url = `https://vietqr.io/pay?amount=${amount}&account=${account}&addInfo=${encodeURIComponent(description)}&accountName=${encodeURIComponent(name)}&app=${appCode}`;
+
+  window.location.href = url;
+}
 </script>
 </body>
 </html>
-<!-- Kết thúc các script -->
-</body>
-</html>
+
