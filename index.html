@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Ở Đây Có Gì – Trang chủ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Playfair+Display&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -64,6 +64,7 @@
     h1 {
       font-size: 36px;
       margin-bottom: 10px;
+      font-family: 'Playfair Display', serif;
     }
 
     .brand {
@@ -93,25 +94,12 @@
       width: 240px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       transition: transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn:hover {
       transform: translateY(-3px);
-    }
-
-    .left {
-      background: #28a745;
-      color: white;
-    }
-
-    .center {
-      background: #007bff;
-      color: white;
-    }
-
-    .right {
-      background: #d2691e;
-      color: white;
     }
 
     .btn span {
@@ -119,6 +107,43 @@
       font-size: 14px;
       margin-top: 6px;
       color: #f0f0f0;
+    }
+
+    .btn.right {
+      background: linear-gradient(135deg, #ff6f61, #ffb347);
+      color: white;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .btn.right::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .btn.right:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 111, 97, 0.6);
+    }
+
+    .btn.center {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn.left {
+      background: #28a745;
+      color: white;
     }
   </style>
 </head>
@@ -134,16 +159,16 @@
     <p class="subtitle">Nơi kết nối những người phục vụ và những người cần được phục vụ trong cộng đồng địa phương.</p>
 
     <div class="options">
-      <button onclick="location.href='dang-ky.html'" class="btn left">
-        🧑‍🔧 Tôi là người làm dịch vụ<br><span>Đăng ký để kết nối</span>
+      <button onclick="showPopup()" class="btn right">
+         Trà sữa & Ăn vặt<br><span>Ngọt ngào, mát lạnh, giòn tan – Đặt ngay!</span>
       </button>
 
       <button onclick="location.href='dich-vu.html'" class="btn center">
         🧑‍💼 Tôi muốn sử dụng dịch vụ<br><span>Xem danh sách ngành nghề</span>
       </button>
 
-      <button onclick="location.href='trasua.html'" class="btn right">
-        🍓 Đồ uống & Ăn nhẹ<br><span>Đặt món ngay</span>
+      <button onclick="location.href='dang-ky.html'" class="btn left">
+        🧑‍🔧 Tôi là người làm dịch vụ<br><span>Đăng ký để kết nối</span>
       </button>
     </div>
   </div>
@@ -156,8 +181,11 @@
         ? "☀️ Chế độ ban ngày"
         : "🌙 Chuyển chế độ";
     };
+
+    function showPopup() {
+      alert("🧋 Bạn vừa gọi ly Trà sữa Okinawa – vị đường đen cháy, trân châu dai giòn, đá mát lạnh. Chuẩn bị giao trong 15 phút!");
+      location.href = "trasua.html";
+    }
   </script>
 </body>
 </html>
-
-
