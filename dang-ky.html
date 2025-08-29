@@ -1,87 +1,86 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>ĐĂNG KÝ LÀM DỊCH VỤ GPS</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- 🛡 Chống cache HTML -->
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-
-<style>
-  body {font-family: sans-serif; background: #f0f0f0; padding: 40px; max-width: 520px; margin: auto;}
-  label {display: block; margin-top: 16px; font-weight: 600;}
-  input, textarea, select {width: 100%; padding: 8px; margin-top: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box;}
-  .row {display: flex; gap: 10px;}
-  .row > * {flex: 1;}
-  .btn {margin-top: 18px; padding: 10px 16px; font-size: 16px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer;}
-  .btn.secondary {background: #555;}
-  .status {margin-top: 12px; font-size: 13px; color: #555;}
-  .status.ok {color: #0a7a0a;}
-  .status.warn {color: #b35a00;}
-  .status.err {color: #b00020;}
-  .muted {color:#777; font-size: 12px; margin-top: 6px;}
-</style>
+  <meta charset="UTF-8">
+  <title>ĐĂNG KÝ LÀM DỊCH VỤ GPS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <style>
+    body {font-family: sans-serif; background: #f0f0f0; padding: 40px; max-width: 520px; margin: auto;}
+    label {display: block; margin-top: 16px; font-weight: 600;}
+    input, textarea, select {width: 100%; padding: 8px; margin-top: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box;}
+    .row {display: flex; gap: 10px;}
+    .row > * {flex: 1;}
+    .btn {margin-top: 18px; padding: 10px 16px; font-size: 16px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer;}
+    .btn.secondary {background: #555;}
+    .status {margin-top: 12px; font-size: 13px; color: #555;}
+    .status.ok {color: #0a7a0a;}
+    .status.warn {color: #b35a00;}
+    .status.err {color: #b00020;}
+    .muted {color:#777; font-size: 12px; margin-top: 6px;}
+  </style>
 </head>
 <body>
-<h2>📋 ĐĂNG KÝ LÀM DỊCH VỤ</h2>
+  <h2>📋 ĐĂNG KÝ LÀM DỊCH VỤ</h2>
 
-<form id="testForm">
-  <label>👤 Họ tên:</label>
-  <input type="text" name="name" required>
+  <form id="testForm">
+    <label>👤 Họ tên:</label>
+    <input type="text" name="name" required>
 
-  <label>📱 Số điện thoại (10 số):</label>
-  <input type="tel" name="phone" pattern="[0-9]{10}" maxlength="10" required title="Nhập đúng 10 chữ số">
+    <label>📱 Số điện thoại (10 số):</label>
+    <input type="tel" name="phone" pattern="[0-9]{10}" maxlength="10" required title="Nhập đúng 10 chữ số">
 
-  <label>🆔 Căn cước công dân (12 số):</label>
-  <input type="text" name="idcard" pattern="[0-9]{12}" maxlength="12" required title="Nhập đúng 12 chữ số">
+    <label>🆔 Căn cước công dân (12 số):</label>
+    <input type="text" name="idcard" pattern="[0-9]{12}" maxlength="12" required title="Nhập đúng 12 chữ số">
 
-  <label>🛠️ Ngành nghề:</label>
-  <select name="job" required>
-    <option value="">-- Chọn ngành nghề --</option>
-    <option value="Tài xế">Tài xế</option>
-    <option value="Giao hàng">Giao hàng</option>
-    <option value="Kế toán">Kế toán</option>
-    <option value="Bảo vệ">Bảo vệ</option>
-    <option value="Khác">Khác</option>
-  </select>
+    <label>🛠️ Ngành nghề:</label>
+    <select name="job" required>
+      <option value="">-- Chọn ngành nghề --</option>
+      <option value="Tài xế">Tài xế</option>
+      <option value="Giao hàng">Giao hàng</option>
+      <option value="Kế toán">Kế toán</option>
+      <option value="Bảo vệ">Bảo vệ</option>
+      <option value="Khác">Khác</option>
+    </select>
 
-  <label>📍 Khu vực:</label>
-  <select name="area" required>
-    <option value="">-- Chọn khu vực --</option>
-    <option value="HCM">HCM</option>
-    <option value="BRVT">Bà Rịa - Vũng Tàu</option>
-    <option value="ĐN">Đà Nẵng</option>
-    <option value="HN">Hà Nội</option>
-    <option value="CT">Cần Thơ</option>
-  </select>
+    <label>📍 Khu vực:</label>
+    <select name="area" required>
+      <option value="">-- Chọn khu vực --</option>
+      <option value="HCM">HCM</option>
+      <option value="BRVT">Bà Rịa - Vũng Tàu</option>
+      <option value="ĐN">Đà Nẵng</option>
+      <option value="HN">Hà Nội</option>
+      <option value="CT">Cần Thơ</option>
+    </select>
 
-  <label>🕒 Thời gian làm:</label>
-  <select name="time" required>
-    <option value="">-- Chọn thời gian --</option>
-    <option value="Sáng">Sáng</option>
-    <option value="Chiều">Chiều</option>
-    <option value="Tối">Tối</option>
-    <option value="Cả ngày">Cả ngày</option>
-  </select>
+    <label>🕒 Thời gian làm:</label>
+    <select name="time" required>
+      <option value="">-- Chọn thời gian --</option>
+      <option value="Sáng">Sáng</option>
+      <option value="Chiều">Chiều</option>
+      <option value="Tối">Tối</option>
+      <option value="Cả ngày">Cả ngày</option>
+    </select>
 
-  <label>🏠 Địa chỉ hiện tại:</label>
-  <div class="row">
-    <input type="text" name="address" id="address" placeholder="Nhập địa chỉ hoặc bấm 'Dùng vị trí hiện tại'">
-    <button type="button" class="btn secondary" id="btnUseCurrent">Dùng vị trí hiện tại</button>
-  </div>
-  <div class="muted">Có thể nhập tay hoặc tự động điền từ GPS.</div>
+    <label>📝 Ghi chú:</label>
+    <textarea name="note" rows="2" placeholder="Ghi chú thêm nếu có..."></textarea>
 
-  <input type="hidden" name="latitude" id="latitude">
-  <input type="hidden" name="longitude" id="longitude">
+    <label>🏠 Địa chỉ hiện tại:</label>
+    <div class="row">
+      <input type="text" name="address" id="address" placeholder="Nhập địa chỉ hoặc bấm 'Dùng vị trí hiện tại'">
+      <button type="button" class="btn secondary" id="btnUseCurrent">Dùng vị trí hiện tại</button>
+    </div>
+    <div class="muted">Có thể nhập tay hoặc tự động điền từ GPS.</div>
 
-  <button type="submit" class="btn" id="btnSubmit">📤 Gửi</button>
-  <div id="gpsStatus" class="status">Trạng thái GPS: chưa lấy vị trí.</div>
-  <div id="submitStatus" class="status"></div>
-</form>
+    <input type="hidden" id="latitude">
+    <input type="hidden" id="longitude">
 
+    <button type="submit" class="btn" id="btnSubmit">📤 Gửi</button>
+    <div id="gpsStatus" class="status">Trạng thái GPS: chưa lấy vị trí.</div>
+    <div id="submitStatus" class="status"></div>
+  </form>
 <script>
   const gpsStatus = document.getElementById("gpsStatus");
   const submitStatus = document.getElementById("submitStatus");
@@ -101,6 +100,7 @@
     latEl.value = latitude;
     lngEl.value = longitude;
     setStatus(`đã lấy (${latitude.toFixed(6)}, ${longitude.toFixed(6)})`, "ok");
+
     if (opts.fillAddress || !addrEl.value.trim()) {
       try {
         const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=vi`;
@@ -119,10 +119,12 @@
     setStatus(`chưa có vị trí (${err.message})`, "warn");
   }
 
+  // Lấy GPS khi load
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(onGeoSuccess, onGeoError, { enableHighAccuracy: true, timeout: 15000 });
   }
 
+  // Nút "Dùng vị trí hiện tại"
   btnUseCurrent.addEventListener("click", () => {
     setStatus("đang lấy...", "warn");
     navigator.geolocation.getCurrentPosition(
@@ -131,28 +133,47 @@
       { enableHighAccuracy: true, timeout: 20000 }
     );
   });
+
   // Submit form
   document.getElementById("testForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     submitStatus.textContent = "";
+
     if (!latEl.value || !lngEl.value) {
       setStatus("chưa có vị trí. Vui lòng bật GPS hoặc bấm 'Dùng vị trí hiện tại'", "err");
       return;
     }
+
     const formData = new FormData(this);
+    const gmapsLink = `https://www.google.com/maps?q=${latEl.value},${lngEl.value}`;
+    formData.append("gmaps_link", gmapsLink);
+
     btnSubmit.disabled = true;
     const prevText = btnSubmit.textContent;
     btnSubmit.textContent = "⏳ Đang gửi...";
+
     try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbxwYJObHC3zwAlNkFpNTCpAMlXBMOcGKg19VAXIFOcjy7r2k2x36S2uW_n-B_5RXUPOmw/exec", {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbznQFPI7IVITEjlyHsis4f6vGQYxEeocOxV2Q6qXjj5rRPeuC9VynUTbNBvZ3iNNI-hVA/exec", {
         method: "POST",
         body: formData
       });
       const text = await res.text();
-      submitStatus.textContent = text;
-      submitStatus.className = "status ok";
-      this.reset();
-      setStatus("chưa lấy vị trí.", "warn");
+
+      // Nếu trùng CCCD + nghề
+      if (text.includes("⚠️ CCCD này đã đăng ký ngành nghề này rồi")) {
+        submitStatus.textContent = text;
+        submitStatus.className = "status err";
+      } else {
+        submitStatus.innerHTML = `
+          ✅ ${text}<br>
+          <a href="${gmapsLink}" target="_blank" style="color:#007bff;text-decoration:underline;">
+            📍 Xem vị trí trên Google Maps
+          </a>
+        `;
+        submitStatus.className = "status ok";
+        this.reset();
+        setStatus("chưa lấy vị trí.", "warn");
+      }
     } catch (err) {
       submitStatus.textContent = "❌ Lỗi gửi: " + err.message;
       submitStatus.className = "status err";
@@ -162,7 +183,7 @@
     }
   });
 
-  // 📌 Đăng ký Service Worker để trang này luôn được cập nhật
+  // Đăng ký Service Worker để chống cache
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js")
       .then(() => console.log("✅ Service Worker đã đăng ký cho dang-ky.html"))
