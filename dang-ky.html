@@ -64,6 +64,13 @@
       <option value="Cả ngày">Cả ngày</option>
     </select>
 
+    <!-- Thêm phần mật khẩu -->
+    <label>🔑 Mật khẩu:</label>
+    <input type="password" name="password" id="password" required minlength="4" placeholder="Nhập mật khẩu">
+
+    <label>🔑 Nhập lại mật khẩu:</label>
+    <input type="password" name="confirm_password" id="confirm_password" required minlength="4" placeholder="Nhập lại mật khẩu">
+
     <label>📝 Ghi chú:</label>
     <textarea name="note" rows="2" placeholder="Ghi chú thêm nếu có..."></textarea>
 
@@ -139,6 +146,21 @@
     e.preventDefault();
     submitStatus.textContent = "";
 
+    // Kiểm tra mật khẩu
+    const pass1 = document.getElementById("password").value.trim();
+    const pass2 = document.getElementById("confirm_password").value.trim();
+    if (pass1.length < 4) {
+      submitStatus.textContent = "⚠️ Mật khẩu phải có ít nhất 4 ký tự";
+      submitStatus.className = "status err";
+      return;
+    }
+    if (pass1 !== pass2) {
+      submitStatus.textContent = "⚠️ Mật khẩu nhập lại không khớp";
+      submitStatus.className = "status err";
+      return;
+    }
+
+    // Kiểm tra GPS
     if (!latEl.value || !lngEl.value) {
       setStatus("chưa có vị trí. Vui lòng bật GPS hoặc bấm 'Dùng vị trí hiện tại'", "err");
       return;
@@ -153,7 +175,7 @@
     btnSubmit.textContent = "⏳ Đang gửi...";
 
     try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbznQFPI7IVITEjlyHsis4f6vGQYxEeocOxV2Q6qXjj5rRPeuC9VynUTbNBvZ3iNNI-hVA/exec", {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwAKYCHNrhQ7jfUPtfw4erwhT3MvFe7P24jHE_Ql1GI9mq2kRTpYLhoLYzlMrMDcljbag/exec", {
         method: "POST",
         body: formData
       });
