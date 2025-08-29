@@ -1,171 +1,160 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Đăng ký làm dịch vụ – Ở Đây Có Gì</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: #fff3e6;
-      color: #333;
-      transition: background 0.3s, color 0.3s;
-    }
-    body.dark {
-      background: #1e1e1e;
-      color: #f0f0f0;
-    }
-    #toggleMode {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999;
-      padding: 10px 16px;
-      font-size: 14px;
-      background: #444;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .logo-container {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .logo-container img {
-      height: 120px;
-      max-width: 100%;
-      object-fit: contain;
-      border-radius: 12px;
-    }
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: rgba(255,255,255,0.95);
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-    body.dark .container {
-      background: rgba(40,40,40,0.95);
-    }
-    h1 {
-      text-align: center;
-      font-size: 32px;
-      color: #a0522d;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #fff;
-      color: #000;
-    }
-    body.dark input,
-    body.dark select,
-    body.dark textarea {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
-    }
-    button[type="submit"] {
-      margin-top: 30px;
-      padding: 12px 24px;
-      font-size: 16px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button[type="submit"]:hover {
-      background: #218838;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>ĐĂNG KÝ LÀM DỊCH VỤ GPS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {font-family: sans-serif; background: #f0f0f0; padding: 40px; max-width: 520px; margin: auto;}
+  label {display: block; margin-top: 16px; font-weight: 600;}
+  input, textarea, select {width: 100%; padding: 8px; margin-top: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box;}
+  .row {display: flex; gap: 10px;}
+  .row > * {flex: 1;}
+  .btn {margin-top: 18px; padding: 10px 16px; font-size: 16px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer;}
+  .btn.secondary {background: #555;}
+  .status {margin-top: 12px; font-size: 13px; color: #555;}
+  .status.ok {color: #0a7a0a;}
+  .status.warn {color: #b35a00;}
+  .status.err {color: #b00020;}
+  .muted {color:#777; font-size: 12px; margin-top: 6px;}
+</style>
 </head>
 <body>
-  <button id="toggleMode">🌙 Chuyển chế độ</button>
+<h2>📋 ĐĂNG KÝ LÀM DỊCH VỤ</h2>
+<form id="testForm">
+  <label>👤 Họ tên:</label>
+  <input type="text" name="name" required>
 
-  <div class="logo-container">
-    <img src="images/LG.png" alt="Logo Ở Đây Có Gì">
+  <label>📱 Số điện thoại (10 số):</label>
+  <input type="tel" name="phone" pattern="[0-9]{10}" maxlength="10" required title="Nhập đúng 10 chữ số">
+
+  <label>🆔 Căn cước công dân (12 số):</label>
+  <input type="text" name="idcard" pattern="[0-9]{12}" maxlength="12" required title="Nhập đúng 12 chữ số">
+
+  <label>🛠️ Ngành nghề:</label>
+  <select name="job" required>
+    <option value="">-- Chọn ngành nghề --</option>
+    <option value="Tài xế">Tài xế</option>
+    <option value="Giao hàng">Giao hàng</option>
+    <option value="Kế toán">Kế toán</option>
+    <option value="Bảo vệ">Bảo vệ</option>
+    <option value="Khác">Khác</option>
+  </select>
+
+  <label>📍 Khu vực:</label>
+  <select name="area" required>
+    <option value="">-- Chọn khu vực --</option>
+    <option value="HCM">HCM</option>
+    <option value="BRVT">Bà Rịa - Vũng Tàu</option>
+    <option value="ĐN">Đà Nẵng</option>
+    <option value="HN">Hà Nội</option>
+    <option value="CT">Cần Thơ</option>
+  </select>
+
+  <label>🕒 Thời gian làm:</label>
+  <select name="time" required>
+    <option value="">-- Chọn thời gian --</option>
+    <option value="Sáng">Sáng</option>
+    <option value="Chiều">Chiều</option>
+    <option value="Tối">Tối</option>
+    <option value="Cả ngày">Cả ngày</option>
+  </select>
+
+  <label>🏠 Địa chỉ hiện tại:</label>
+  <div class="row">
+    <input type="text" name="address" id="address" placeholder="Nhập địa chỉ hoặc bấm 'Dùng vị trí hiện tại'">
+    <button type="button" class="btn secondary" id="btnUseCurrent">Dùng vị trí hiện tại</button>
   </div>
+  <div class="muted">Có thể nhập tay hoặc tự động điền từ GPS.</div>
 
-  <div class="container">
-    <h1>Đăng ký làm dịch vụ</h1>
-    <form id="serviceForm">
-      <label>👤 Họ tên:</label>
-      <input type="text" name="name" required>
+  <input type="hidden" name="latitude" id="latitude">
+  <input type="hidden" name="longitude" id="longitude">
 
-      <label>📱 Số điện thoại:</label>
-      <input type="tel" name="phone" required>
+  <button type="submit" class="btn" id="btnSubmit">📤 Gửi</button>
+  <div id="gpsStatus" class="status">Trạng thái GPS: chưa lấy vị trí.</div>
+  <div id="submitStatus" class="status"></div>
+</form>
 
-      <label>🆔 Căn cước công dân:</label>
-      <input type="text" name="idcard" required>
+<script>
+  const gpsStatus = document.getElementById("gpsStatus");
+  const submitStatus = document.getElementById("submitStatus");
+  const btnSubmit = document.getElementById("btnSubmit");
+  const btnUseCurrent = document.getElementById("btnUseCurrent");
+  const latEl = document.getElementById("latitude");
+  const lngEl = document.getElementById("longitude");
+  const addrEl = document.getElementById("address");
 
-      <label>🛠️ Ngành nghề muốn làm:</label>
-      <select name="job" required>
-        <option value="">-- Chọn ngành nghề --</option>
-        <option value="Dọn nhà">Dọn nhà</option>
-        <option value="Sửa điện nước">Sửa điện nước</option>
-        <option value="Trông trẻ">Trông trẻ</option>
-        <option value="Làm tóc tại nhà">Làm tóc tại nhà</option>
-        <option value="Dạy kèm">Dạy kèm</option>
-        <option value="Chăm sóc người già">Chăm sóc người già</option>
-        <option value="Giặt ủi">Giặt ủi</option>
-        <option value="Chăm thú cưng">Chăm thú cưng</option>
-      </select>
+  function setStatus(msg, level) {
+    gpsStatus.textContent = "Trạng thái GPS: " + msg;
+    gpsStatus.className = "status " + (level || "");
+  }
 
-      <label>📍 Khu vực hoạt động:</label>
-      <input type="text" name="area" placeholder="VD: Phường 5, Vũng Tàu" required>
+  async function onGeoSuccess(pos, opts = {}) {
+    const { latitude, longitude } = pos.coords;
+    latEl.value = latitude;
+    lngEl.value = longitude;
+    setStatus(`đã lấy (${latitude.toFixed(6)}, ${longitude.toFixed(6)})`, "ok");
+    if (opts.fillAddress || !addrEl.value.trim()) {
+      try {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=vi`;
+        const res = await fetch(url, { headers: { "Accept": "application/json" } });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.display_name && !addrEl.value.trim()) {
+            addrEl.value = data.display_name;
+          }
+        }
+      } catch {}
+    }
+  }
 
-      <label>🕒 Thời gian rảnh:</label>
-      <select name="time">
-        <option value="Sáng">Sáng</option>
-        <option value="Chiều">Chiều</option>
-        <option value="Tối">Tối</option>
-        <option value="Cuối tuần">Cuối tuần</option>
-      </select>
+  function onGeoError(err) {
+    setStatus(`chưa có vị trí (${err.message})`, "warn");
+  }
 
-      <label>📝 Ghi chú thêm:</label>
-      <textarea name="note" rows="3" placeholder="Kinh nghiệm, mong muốn, thời gian cụ thể..."></textarea>
+  // Lấy vị trí khi tải trang (không alert)
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(onGeoSuccess, onGeoError, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  }
 
-      <button type="submit">📤 Gửi đơn đăng ký</button>
-    </form>
-  </div>
+  btnUseCurrent.addEventListener("click", () => {
+    setStatus("đang lấy...", "warn");
+    navigator.geolocation.getCurrentPosition(
+      pos => onGeoSuccess(pos, { fillAddress: true }),
+      onGeoError,
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+    );
+  });
 
-  <script>
-    const toggleBtn = document.getElementById("toggleMode");
-    toggleBtn.onclick = () => {
-      document.body.classList.toggle("dark");
-      toggleBtn.innerHTML = document.body.classList.contains("dark") ? "☀️ Chế độ ban ngày" : "🌙 Chuyển chế độ";
-    };
-
-    document.getElementById("serviceForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      fetch("https://script.google.com/macros/s/AKfycbz093lOVHwi0eCoEHEfVTyHfTJG1ZN-MZxTdQduqpl3nGt_ePFwNMgX6aGAzbLU-ALdWg/exec", {
+  document.getElementById("testForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    submitStatus.textContent = "";
+    if (!latEl.value || !lngEl.value) {
+      setStatus("chưa có vị trí. Vui lòng bật GPS hoặc bấm 'Dùng vị trí hiện tại'", "err");
+      return;
+    }
+    const formData = new FormData(this);
+    btnSubmit.disabled = true;
+    const prevText = btnSubmit.textContent;
+    btnSubmit.textContent = "⏳ Đang gửi...";
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbxwYJObHC3zwAlNkFpNTCpAMlXBMOcGKg19VAXIFOcjy7r2k2x36S2uW_n-B_5RXUPOmw/exec", {
         method: "POST",
         body: formData
-      })
-      .then(() => {
-        alert("✅ Đã gửi! Thông tin của bạn đã được lưu vào bảng tính.");
-        this.reset();
-      })
-      .catch(() => {
-        alert("❌ Gửi thất bại. Vui lòng thử lại.");
       });
-    });
-  </script>
+      const text = await res.text();
+      submitStatus.textContent = text;
+      submitStatus.className = "status ok";
+      this.reset();
+      setStatus("chưa lấy vị trí.", "warn");
+    } catch (err) {
+      submitStatus.textContent = "❌ Lỗi gửi: " + err.message;
+      submitStatus.className = "status err";
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = prevText;
+    }
+  });
+</script>
 </body>
 </html>
