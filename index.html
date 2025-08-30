@@ -1,213 +1,418 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Ở Đây Có Gì – Trang chủ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Playfair+Display&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ở Đây Có Gì?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --red: #C62828;
+      --light-red: #FFCDD2;
+      --bg: #FAFAFA;
+    }
+
     body {
       margin: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: #fff3e6;
-      color: #333;
-      transition: background 0.3s, color 0.3s;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #212121;
+      animation: fadeIn 0.6s ease-in;
     }
 
-    body.dark {
-      background: #1e1e1e;
-      color: #f0f0f0;
+    section h2 {
+  font-size: 18px;
+  margin: 20px 16px 12px;
+  color: #C62828; /* Màu đỏ đậm */
+  font-family: 'Playfair Display', serif; /* Font chữ sang trọng, ấm áp */
+}
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    #toggleMode {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999;
-      padding: 10px 16px;
-      font-size: 14px;
-      background: #444;
+    header {
+      background: linear-gradient(135deg, var(--red), #FF5252);
       color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .logo-container {
-      text-align: center;
-      margin-top: 60px;
-      margin-bottom: -20px;
-    }
-
-    .logo-container img {
-      height: 120px;
-      max-width: 100%;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .welcome {
-      max-width: 800px;
-      margin: 40px auto;
-      background: rgba(255,255,255,0.95);
-      padding: 40px;
-      border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-
-    body.dark .welcome {
-      background: rgba(40,40,40,0.95);
-    }
-
-    h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-      font-family: 'Playfair Display', serif;
-    }
-
-    .brand {
-      color: #a0522d;
-      font-weight: bold;
-    }
-
-    .subtitle {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 40px;
-    }
-
-    .options {
+      padding: 16px;
       display: flex;
-      justify-content: center;
-      gap: 30px;
+      justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
+      gap: 12px;
     }
 
-    .btn {
-      padding: 20px 30px;
-      font-size: 18px;
-      border: none;
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .logo-icon img {
+      width: 52px;
+      height: 52px;
       border-radius: 12px;
-      cursor: pointer;
-      width: 240px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-      position: relative;
+      background: white;
+      padding: 4px;
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      white-space: nowrap;
       overflow: hidden;
     }
 
-    .btn:hover {
-      transform: translateY(-3px);
-    }
-
-    .btn span {
-      display: block;
-      font-size: 14px;
-      margin-top: 6px;
-      color: #f0f0f0;
-    }
-
-    .btn.right {
-      background: linear-gradient(135deg, #ff6f61, #ffb347);
-      color: white;
+    .logo-text h1 {
       font-family: 'Playfair Display', serif;
-    }
-
-    .btn.right::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-      animation: shimmer 3s infinite;
-    }
-
-    @keyframes shimmer {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .btn.right:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255, 111, 97, 0.6);
-    }
-
-    .btn.center {
-      background: #007bff;
+      font-size: 20px;
+      margin: 0;
       color: white;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
-    .btn.left {
-      background: #28a745;
+    .logo-text .slogan {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      margin-top: 4px;
+      color: #FFEAEA;
+      font-weight: 400;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .login-button {
+      background: #C62828;
+      border-radius: 12px;
+      padding: 8px 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      height: 40px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .login-button a {
       color: white;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .logo {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .logo-icon img {
+        width: 44px;
+        height: 44px;
+      }
+
+      .logo-text h1 {
+        font-size: 18px;
+      }
+
+      .logo-text .slogan {
+        font-size: 12px;
+      }
+
+      .login-button {
+        align-self: flex-end;
+        margin-top: 8px;
+        padding: 6px 12px;
+        height: 36px;
+      }
+
+      .login-button a {
+        font-size: 13px;
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      padding: 0 16px 24px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 20px;
+      padding: 16px 12px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+      border: 1px solid #FFCDD2;
+      transition: transform 0.25s ease;
+      cursor: pointer;
+      user-select: none;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card p {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      z-index: 10;
+    }
+
+    .bottom-nav a {
+      flex: 1;
+      text-align: center;
+      font-size: 24px;
+      color: #C62828;
+      text-decoration: none;
+      padding: 10px 0;
+      transition: background 0.3s ease;
+    }
+
+    .bottom-nav a:hover {
+      background: #FFEBEE;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <button id="toggleMode">🌙 Chuyển chế độ</button>
+  <div id="main-content">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="icon-512.png" alt="Logo Ở Đây Có Gì?" />
+        </div>
+        <div class="logo-text">
+          <h1>Ở Đây Có Gì?</h1>
+          <p class="slogan">Kết nối yêu thương</p>
+        </div>
+      </div>
+      <div class="login-button">
+        <a href="#" onclick="openPopup()">🔐 Đăng nhập &gt;</a>
+      </div>
+    </header>
+    <section>
+      <h2>Dịch vụ yêu thích</h2>
+      <div class="grid">
+        <a href="bando.html" class="card">💸<p>Đặt xe</p></a>
+        <a href="trasua.html" class="card">🧾<p>Đặt nước</p></a>
+        <a href="lamdep.html" class="card">📷<p>Làm đẹp - Sức khỏe</p></a>
+        <a href="donTre.html" class="card">💳<p>Đón trẻ</p></a>
+        <a href="vanchuyen.html" class="card">🐷<p>Vận chuyển</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Giao hàng</p></a>
+	<a href="laodong.html" class="card">🛍️<p>Tìm việc làm</p></a>
+	<a href="laodong.html" class="card">🛍️<p>Rao vặt</p></a>
+	<a href="laodong.html" class="card">🛍️<p>Mở cửa hàng</p></a>
+      </div>
+    </section>
 
-  <div class="logo-container">
-    <img src="images/LG.png" alt="Logo Ở Đây Có Gì">
+    <section>
+      <h2>Trà sữa</h2>
+      <div class="grid">
+        <a href="trasua1.html" class="card">📊<p>Trà sữa 1</p></a>
+        <a href="trasua2.html" class="card">🪙<p>Trà sữa 2</p></a>
+        <a href="trasua3.html" class="card">📚<p>Trà sữa 3</p></a>
+        <a href="trasua4.html" class="card">🛡️<p>Trà sữa 4</p></a>
+        <a href="trasua5.html" class="card">🐞<p>Trà sữa 5</p></a>
+        <a href="trasua6.html" class="card">📈<p>Trà sữa 6</p></a>
+        <a href="trasua7.html" class="card">💰<p>Trà sữa 7</p></a>
+        <a href="trasua8.html" class="card">📱<p>Trà sữa 8</p></a>
+        <a href="trasua9.html" class="card">✈️<p>Trà sữa 9</p></a>
+        <a href="trasua10.html" class="card">🎓<p>Trà sữa 10</p></a>
+        <a href="trasua11.html" class="card">❤️<p>Trà sữa 11</p></a>
+        <a href="trasua12.html" class="card">💬<p>Trà sữa 12</p></a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Trà trái cây</h2>
+      <div class="grid">
+        <a href="tratraicay1.html" class="card">🍓<p>Trà trái cây 1</p></a>
+        <a href="tratraicay2.html" class="card">🍍<p>Trà trái cây 2</p></a>
+        <a href="tratraicay3.html" class="card">🍑<p>Trà trái cây 3</p></a>
+        <a href="tratraicay4.html" class="card">🍋<p>Trà trái cây 4</p></a>
+        <a href="tratraicay5.html" class="card">🍇<p>Trà trái cây 5</p></a>
+        <a href="tratraicay6.html" class="card">🥭<p>Trà trái cây 6</p></a>
+        <a href="tratraicay7.html" class="card">🍉<p>Trà trái cây 7</p></a>
+        <a href="tratraicay8.html" class="card">🍊<p>Trà trái cây 8</p></a>
+        <a href="tratraicay9.html" class="card">🍏<p>Trà trái cây 9</p></a>
+        <a href="tratraicay10.html" class="card">🍈<p>Trà trái cây 10</p></a>
+        <a href="tratraicay11.html" class="card">🍒<p>Trà trái cây 11</p></a>
+        <a href="tratraicay12.html" class="card">🥝<p>Trà trái cây 12</p></a>
+      </div>
+    </section>
+
+    <nav class="bottom-nav">
+      <a href="index.html">🏠</a>
+      <a href="thongbao.html">🔔</a>
+      <a href="lienhe.html">📞</a>
+      <a href="taikhoan.html">👤</a>
+    </nav>
+  </div> <!-- Kết thúc #main-content -->
+
+<!-- POPUP CHỌN VAI TRÒ -->
+<div class="overlay" id="popup">
+  <div class="role-box">
+    <span class="close-btn" onclick="closePopup()">❌</span>
+    <h2>Bạn muốn tiếp tục với vai trò nào?</h2>
+    <button onclick="selectRole('user')">👤 Tôi muốn sử dụng dịch vụ</button>
+    <button onclick="selectRole('provider')">🛠️ Tôi là người làm dịch vụ</button>
   </div>
+</div>
 
-  <div class="welcome">
-    <h1>Chào mừng đến với <span class="brand">Ở Đây Có Gì</span></h1>
-    <p class="subtitle">Nơi kết nối những người phục vụ và những người cần được phục vụ trong cộng đồng địa phương.</p>
+<style>
+  .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(33, 33, 33, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
 
-    <div class="options">
+  .overlay.active {
+    display: flex;
+  }
 
-      <button onclick="location.href='bando.html'" class="btn center">
-        Đặt xe <br><span>Xem danh sách tài xế</span>
-      </button>
+  .role-box {
+    background: white;
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    text-align: center;
+    width: 90%;
+    max-width: 320px;
+    position: relative;
+    animation: fadeIn 0.4s ease;
+  }
 
-      <button onclick="location.href='dich-vu.html'" class="btn center">
-        Đặt dịch vụ<br><span>Xem danh sách ngành nghề</span>
-      </button>
+  .role-box h2 {
+    margin-bottom: 24px;
+    font-size: 20px;
+    color: #C62828;
+  }
 
-      <button onclick="location.href='dang-ky.html'" class="btn left">
-        Đăng ký làm dịch vụ<br><span>Đăng ký để kết nối</span>
-      </button>
+  .role-box button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
 
-      <button onclick="location.href='trasua.html'" class="btn right">
-        Trà sữa & Ăn vặt<br><span>Đặt hàng ủng hộ hoạt động của web</span>
-      </button>
+  .role-box button:first-of-type {
+    background: #C62828;
+    color: white;
+  }
 
-      <!-- ✅ Nút đăng nhập -->
-      <button onclick="location.href='dang-nhap.html'" class="btn center">
-        Đăng nhập<br><span>Dành cho người làm dịch vụ</span>
-      </button>
+  .role-box button:last-of-type {
+    background: #FFEBEE;
+    color: #C62828;
+    border: 1px solid #C62828;
+  }
 
-      <!-- ✅ Nút khiếu nại – CSKH -->
-      <button onclick="location.href='cham-soc-khach-hang.html'" class="btn center">
-        Khiếu nại – CSKH<br><span>Gửi phản hồi hoặc yêu cầu hỗ trợ</span>
-      </button>
+  .role-box button:hover {
+    opacity: 0.9;
+  }
 
-      <!-- ✅ Nút tra cứu đơn hàng -->
-      <button onclick="location.href='tra-cuu.html'" class="btn center">
-        Tra cứu đơn hàng<br><span>Kiểm tra trạng thái đơn của bạn</span>
-      </button>
-    </div>
-  </div>
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #888;
+  }
 
-  <script>
-    const toggleBtn = document.getElementById("toggleMode");
-    toggleBtn.onclick = () => {
-      document.body.classList.toggle("dark");
-      toggleBtn.innerHTML = document.body.classList.contains("dark")
-        ? "☀️ Chế độ ban ngày"
-        : "🌙 Chuyển chế độ";
-    };
+  body.popup-active #main-content {
+    filter: blur(6px);
+    pointer-events: none;
+  }
 
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js")
-        .then(() => console.log("✅ Service Worker đã được đăng ký"))
-        .catch(err => console.error("❌ Lỗi Service Worker:", err));
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>
+
+<script>
+  function openPopup() {
+    document.getElementById("popup").classList.add("active");
+    document.body.classList.add("popup-active");
+  }
+
+  function closePopup() {
+    document.getElementById("popup").classList.remove("active");
+    document.body.classList.remove("popup-active");
+  }
+
+  function selectRole(role) {
+    if (role === 'user') {
+      window.location.href = "index-user.html";
+    } else {
+      window.location.href = "index-provider.html";
     }
-  </script>
+  }
+</script>
+<script>
+  function openPopup() {
+    document.getElementById("popup").classList.add("active");
+    document.body.classList.add("popup-active");
+  }
+
+  function closePopup() {
+    document.getElementById("popup").classList.remove("active");
+    document.body.classList.remove("popup-active");
+  }
+
+  function selectRole(role) {
+    if (role === 'user') {
+      window.location.href = "dich-vu.html"; // ✅ Người dùng → trang dịch vụ
+    } else {
+      window.location.href = "dang-nhap.html"; // ✅ Người làm dịch vụ → trang đăng nhập
+    }
+  }
+</script>
 </body>
 </html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chọn vai trò</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: rgba(33, 33, 33, 0.6);
+      backdrop-filter: blur(6px); /* ✅ Làm mờ index phía sau */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .role-box {
+      background: white;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      text-align: center;
+      width: 90%;
+      max-width: 320px;
+      position: relative;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .role-box h2 {
+      margin-bottom: 24px;
+      font-size: 20px;
+      color: #C62828;
+    }
+
+    .role-box button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .role-box button:first-of-type {
+      background: #C62828;
+      color: white;
+    }
+
+    .role-box button:last-of-type {
+      background: #FFEBEE;
+      color: #C62828;
+      border: 1px solid #C62828;
+    }
+
+    .role-box button:hover {
+      opacity: 0.9;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="role-box">
+    <span class="close-btn" onclick="goBack()">❌</span>
+    <h2>Bạn muốn tiếp tục với vai trò nào?</h2>
+    <button onclick="selectRole('user')">👤 Tôi muốn sử dụng dịch vụ</button>
+    <button onclick="selectRole('provider')">🛠️ Tôi là người làm dịch vụ</button>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "index.html"; // ✅ Quay lại giao diện chính
+    }
+
+    function selectRole(role) {
+      if (role === 'user') {
+        window.location.href = "index-user.html";
+      } else {
+        window.location.href = "index-provider.html";
+      }
+    }
+  </script>
+
+</body>
+</html>
