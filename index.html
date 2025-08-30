@@ -21,11 +21,11 @@
     }
 
     section h2 {
-  font-size: 18px;
-  margin: 20px 16px 12px;
-  color: #C62828; /* Màu đỏ đậm */
-  font-family: 'Playfair Display', serif; /* Font chữ sang trọng, ấm áp */
-}
+      font-size: 18px;
+      margin: 20px 16px 12px;
+      color: #C62828;
+      font-family: 'Playfair Display', serif;
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
@@ -87,26 +87,42 @@
       overflow: hidden;
     }
 
-    .login-button {
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .login-button,
+    .signup-button {
       background: #C62828;
       border-radius: 12px;
       padding: 8px 14px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       height: 40px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      flex-shrink: 0;
-    }
-
-    .login-button a {
+      justify-content: center;
       color: white;
       font-weight: 600;
       font-size: 14px;
-      text-decoration: none;
       font-family: 'Inter', sans-serif;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .signup-button {
+      background: #FFEBEE;
+      color: #C62828;
+      border: 1px solid #C62828;
+    }
+
+    .login-button:hover {
+      background: #b71c1c;
+    }
+
+    .signup-button:hover {
+      background: #ffcdd2;
     }
 
     @media (max-width: 480px) {
@@ -133,15 +149,18 @@
         font-size: 12px;
       }
 
-      .login-button {
-        align-self: flex-end;
+      .auth-buttons {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
         margin-top: 8px;
-        padding: 6px 12px;
-        height: 36px;
       }
 
-      .login-button a {
+      .login-button,
+      .signup-button {
         font-size: 13px;
+        padding: 6px 12px;
+        height: 36px;
       }
     }
 
@@ -221,8 +240,9 @@
           <p class="slogan">Kết nối yêu thương</p>
         </div>
       </div>
-      <div class="login-button">
-        <a href="#" onclick="openPopup()">🔐 Đăng nhập &gt;</a>
+      <div class="auth-buttons">
+        <a href="#" class="login-button" onclick="openPopup()">🔐 Đăng nhập</a>
+        <a href="dang-ky.html" class="signup-button">📝 Đăng ký</a>
       </div>
     </header>
     <section>
@@ -234,9 +254,9 @@
         <a href="donTre.html" class="card">💳<p>Đón trẻ</p></a>
         <a href="vanchuyen.html" class="card">🐷<p>Vận chuyển</p></a>
         <a href="laodong.html" class="card">🛍️<p>Giao hàng</p></a>
-	<a href="laodong.html" class="card">🛍️<p>Tìm việc làm</p></a>
-	<a href="laodong.html" class="card">🛍️<p>Rao vặt</p></a>
-	<a href="laodong.html" class="card">🛍️<p>Mở cửa hàng</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Tìm việc làm</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Rao vặt</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Mở cửa hàng</p></a>
       </div>
     </section>
 
@@ -284,136 +304,116 @@
     </nav>
   </div> <!-- Kết thúc #main-content -->
 
-<!-- POPUP CHỌN VAI TRÒ -->
-<div class="overlay" id="popup">
-  <div class="role-box">
-    <span class="close-btn" onclick="closePopup()">❌</span>
-    <h2>Bạn muốn tiếp tục với vai trò nào?</h2>
-    <button onclick="selectRole('user')">👤 Tôi muốn sử dụng dịch vụ</button>
-    <button onclick="selectRole('provider')">🛠️ Tôi là người làm dịch vụ</button>
+  <!-- POPUP CHỌN VAI TRÒ -->
+  <div class="overlay" id="popup">
+    <div class="role-box">
+      <span class="close-btn" onclick="closePopup()">❌</span>
+      <h2>Bạn muốn tiếp tục với vai trò nào?</h2>
+      <button onclick="selectRole('user')">👤 Tôi muốn sử dụng dịch vụ</button>
+      <button onclick="selectRole('provider')">🛠️ Tôi là người làm dịch vụ</button>
+    </div>
   </div>
-</div>
 
-<style>
-  .overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(33, 33, 33, 0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-
-  .overlay.active {
-    display: flex;
-  }
-
-  .role-box {
-    background: white;
-    padding: 32px;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    text-align: center;
-    width: 90%;
-    max-width: 320px;
-    position: relative;
-    animation: fadeIn 0.4s ease;
-  }
-
-  .role-box h2 {
-    margin-bottom: 24px;
-    font-size: 20px;
-    color: #C62828;
-  }
-
-  .role-box button {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-
-  .role-box button:first-of-type {
-    background: #C62828;
-    color: white;
-  }
-
-  .role-box button:last-of-type {
-    background: #FFEBEE;
-    color: #C62828;
-    border: 1px solid #C62828;
-  }
-
-  .role-box button:hover {
-    opacity: 0.9;
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #888;
-  }
-
-  body.popup-active #main-content {
-    filter: blur(6px);
-    pointer-events: none;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-</style>
-
-<script>
-  function openPopup() {
-    document.getElementById("popup").classList.add("active");
-    document.body.classList.add("popup-active");
-  }
-
-  function closePopup() {
-    document.getElementById("popup").classList.remove("active");
-    document.body.classList.remove("popup-active");
-  }
-
-  function selectRole(role) {
-    if (role === 'user') {
-      window.location.href = "index-user.html";
-    } else {
-      window.location.href = "index-provider.html";
+  <style>
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(33, 33, 33, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
     }
-  }
-</script>
-<script>
-  function openPopup() {
-    document.getElementById("popup").classList.add("active");
-    document.body.classList.add("popup-active");
-  }
 
-  function closePopup() {
-    document.getElementById("popup").classList.remove("active");
-    document.body.classList.remove("popup-active");
-  }
-
-  function selectRole(role) {
-    if (role === 'user') {
-      window.location.href = "dich-vu.html"; // ✅ Người dùng → trang dịch vụ
-    } else {
-      window.location.href = "dang-nhap.html"; // ✅ Người làm dịch vụ → trang đăng nhập
+    .overlay.active {
+      display: flex;
     }
-  }
-</script>
+
+    .role-box {
+      background: white;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      text-align: center;
+      width: 90%;
+      max-width: 320px;
+      position: relative;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .role-box h2 {
+      margin-bottom: 24px;
+      font-size: 20px;
+      color: #C62828;
+    }
+
+    .role-box button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .role-box button:first-of-type {
+      background: #C62828;
+      color: white;
+    }
+
+    .role-box button:last-of-type {
+      background: #FFEBEE;
+      color: #C62828;
+      border: 1px solid #C62828;
+    }
+
+    .role-box button:hover {
+      opacity: 0.9;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    body.popup-active #main-content {
+      filter: blur(6px);
+      pointer-events: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+
+  <script>
+    function openPopup() {
+      document.getElementById("popup").classList.add("active");
+      document.body.classList.add("popup-active");
+    }
+
+    function closePopup() {
+      document.getElementById("popup").classList.remove("active");
+      document.body.classList.remove("popup-active");
+    }
+
+    function selectRole(role) {
+      if (role === 'user') {
+        window.location.href = "dich-vu.html";
+      } else {
+        window.location.href = "dang-nhap.html";
+      }
+    }
+  </script>
 </body>
 </html>
-
