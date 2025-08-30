@@ -1,3 +1,4 @@
+        
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -41,14 +42,15 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
+      text-align: center;
     }
 
-    .logo {
+    .header-left {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-      flex: 1 1 auto;
-      min-width: 0;
+      gap: 6px;
+      flex: 1;
     }
 
     .logo-icon img {
@@ -60,55 +62,46 @@
       box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
     }
 
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
     .logo-text h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 20px;
+      font-size: 26px;
       margin: 0;
       color: white;
       line-height: 1.2;
-      text-overflow: ellipsis;
-      overflow: hidden;
     }
 
     .logo-text .slogan {
       font-family: 'Inter', sans-serif;
-      font-size: 13px;
+      font-size: 18px;
       margin-top: 4px;
       color: #FFEAEA;
       font-weight: 400;
-      text-overflow: ellipsis;
-      overflow: hidden;
     }
 
-    .auth-buttons {
+    .header-right {
       display: flex;
-      gap: 10px;
-      flex-shrink: 0;
+      flex-direction: row;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 12px;
+      width: 100%;
     }
 
-    .login-button,
-    .signup-button {
+    .signup-button,
+    .login-button {
       background: #C62828;
       border-radius: 12px;
       padding: 8px 14px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      height: 40px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       color: white;
       font-weight: 600;
       font-size: 14px;
       font-family: 'Inter', sans-serif;
       text-decoration: none;
+      display: inline-block;
       transition: background 0.3s ease;
+      width: 120px;
+      text-align: center;
     }
 
     .signup-button {
@@ -117,50 +110,25 @@
       border: 1px solid #C62828;
     }
 
-    .login-button:hover {
-      background: #b71c1c;
-    }
-
     .signup-button:hover {
       background: #ffcdd2;
     }
 
-    @media (max-width: 480px) {
-      header {
-        flex-direction: column;
+    .login-button:hover {
+      background: #b71c1c;
+    }
+
+    @media (min-width: 481px) {
+      .header-left {
         align-items: flex-start;
+        text-align: left;
       }
 
-      .logo {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      .logo-icon img {
-        width: 44px;
-        height: 44px;
-      }
-
-      .logo-text h1 {
-        font-size: 18px;
-      }
-
-      .logo-text .slogan {
-        font-size: 12px;
-      }
-
-      .auth-buttons {
+      .header-right {
         flex-direction: column;
         align-items: flex-end;
         gap: 6px;
-        margin-top: 8px;
-      }
-
-      .login-button,
-      .signup-button {
-        font-size: 13px;
-        padding: 6px 12px;
-        height: 36px;
+        width: auto;
       }
     }
 
@@ -231,7 +199,7 @@
 <body>
   <div id="main-content">
     <header>
-      <div class="logo">
+      <div class="header-left">
         <div class="logo-icon">
           <img src="images/icon-512.png" alt="Logo Ở Đây Có Gì?" />
         </div>
@@ -240,16 +208,16 @@
           <p class="slogan">Kết nối yêu thương</p>
         </div>
       </div>
-      <div class="auth-buttons">
-        <a href="#" class="login-button" onclick="openPopup()">🔐 Đăng nhập</a>
+      <div class="header-right">
         <a href="dang-ky.html?v=" + new Date().getTime class="signup-button">📝 Đăng ký</a>
+        <a href="#" class="login-button" onclick="openPopup()">🔐 Đăng nhập</a>
       </div>
     </header>
     <section>
       <h2>Dịch vụ yêu thích</h2>
       <div class="grid">
-        <a href="bando.html?v=1.0" class="card">💸<p>Đặt xe</p></a>
-        <a href="trasua.html?v=1.0" class="card">🧾<p>Đặt nước</p></a>
+        <a href="bando.html" class="card">💸<p>Đặt xe</p></a>
+        <a href="trasua.html" class="card">🧾<p>Đặt nước</p></a>
         <a href="lamdep.html" class="card">📷<p>Làm đẹp - Sức khỏe</p></a>
         <a href="donTre.html" class="card">💳<p>Đón trẻ</p></a>
         <a href="vanchuyen.html" class="card">🐷<p>Vận chuyển</p></a>
@@ -417,5 +385,3 @@
   </script>
 </body>
 </html>
-
-
