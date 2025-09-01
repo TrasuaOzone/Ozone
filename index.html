@@ -1,199 +1,189 @@
-        
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Ở Đây Có Gì?</title>
+  <meta name="description" content="Ở Đây Có Gì? — Kết nối yêu thương: đặt xe, đồ uống, làm đẹp, vận chuyển, việc làm và nhiều dịch vụ tiện ích khác." />
+  <meta name="theme-color" content="#C62828" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Leaflet (map picker) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+
   <style>
-    :root {
-      --red: #C62828;
-      --light-red: #FFCDD2;
-      --bg: #FAFAFA;
+    :root{
+      --red:#C62828; --red-dark:#B71C1C; --light-red:#FFCDD2; --bg:#FAFAFA;
+      --bottom-nav-min-h:64px; --bottom-nav-pad:64px;
+      --field-br:12px; --field-bd:#E6E6E6;
     }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: #212121;
-      animation: fadeIn 0.6s ease-in;
+    html,body{height:100%}
+    body{
+      margin:0; font-family:'Inter',sans-serif; background:var(--bg); color:#212121;
+      -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent;
+      animation:pageFadeIn .4s ease-in; padding-bottom:var(--bottom-nav-pad);
     }
+    @keyframes pageFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    section h2{font-size:18px;margin:16px 12px 10px;color:var(--red);font-family:'Playfair Display',serif}
 
-    section h2 {
-      font-size: 18px;
-      margin: 20px 16px 12px;
-      color: #C62828;
-      font-family: 'Playfair Display', serif;
+    header{
+      background:linear-gradient(135deg,var(--red),#FF5252); color:#fff; padding:16px 12px;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; text-align:center;
     }
+    .header-left{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1 1 100%}
+    .logo-icon img{width:52px;height:52px;border-radius:12px;background:#fff;padding:4px;box-shadow:0 4px 12px rgba(255,255,255,.4)}
+    .logo-text h1{font-family:'Playfair Display',serif;font-size:24px;margin:0;color:#fff;line-height:1.2}
+    .logo-text .slogan{font-size:16px;margin-top:4px;color:#FFEAEA;font-weight:400}
+    .header-right{display:flex;flex-direction:row;justify-content:center;align-items:center;gap:10px;width:100%}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .signup-button,.login-button{
+      border-radius:12px; padding:12px 14px; box-shadow:0 4px 12px rgba(0,0,0,.08);
+      font-weight:600; font-size:14px; text-decoration:none;
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      min-height:44px; min-width:120px; border:1px solid transparent; transition:background .2s,transform .1s,box-shadow .2s; cursor:pointer;
     }
+    .signup-button{background:#FFEBEE;color:var(--red);border-color:var(--red)}
+    .login-button{background:var(--red);color:#fff}
+    .signup-button:active,.login-button:active{transform:translateY(1px)}
 
-    header {
-      background: linear-gradient(135deg, var(--red), #FF5252);
-      color: white;
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      text-align: center;
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;padding:0 12px 24px}
+    .card{
+      background:rgba(255,255,255,.75); border-radius:16px; padding:14px 10px; text-align:center;
+      box-shadow:0 6px 12px rgba(0,0,0,.06); border:1px solid var(--light-red); transition:transform .15s;
+      user-select:none; text-decoration:none; color:inherit; display:block; min-height:88px;
     }
+    .card:active{transform:translateY(2px)}
+    .card .emoji{font-size:22px;display:block}
+    .card p{margin-top:8px;font-size:14px;font-weight:600}
 
-    .header-left {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      flex: 1;
+    .bottom-nav{
+      position:fixed; bottom:0; left:0; right:0; background:#fff; display:flex; justify-content:space-around; align-items:center;
+      padding:8px 0 env(safe-area-inset-bottom,0px); box-shadow:0 -4px 12px rgba(0,0,0,.05);
+      border-top-left-radius:16px; border-top-right-radius:16px; z-index:10; min-height:var(--bottom-nav-min-h);
     }
-
-    .logo-icon img {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      background: white;
-      padding: 4px;
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+    .bottom-nav a{
+      flex:1; text-align:center; font-size:22px; color:var(--red); text-decoration:none; padding:10px 0; transition:background .2s;
+      border-radius:12px; min-height:44px; display:flex; align-items:center; justify-content:center; gap:6px;
     }
+    .bottom-nav a:active{background:#FFEBEE}
 
-    .logo-text h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      margin: 0;
-      color: white;
-      line-height: 1.2;
+    /* Footer + consent + banner */
+    footer.site-footer { margin: 24px 0 calc(var(--bottom-nav-pad) + 8px); padding: 16px 12px; color: #666; font-size: 13px; text-align: center; }
+    .footer-links { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:6px; }
+    .footer-links a { color:var(--red); font-weight:700; text-decoration:none; }
+    .footer-links a:hover { text-decoration:underline; }
+    .consent { display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:start; font-size:13px; color:#444; }
+    .consent a { color:var(--red); font-weight:700; text-decoration:none; }
+    .consent a:hover { text-decoration:underline; }
+    .consent input[type="checkbox"] { margin-top:2px; width:18px; height:18px; accent-color:var(--red); }
+    .consent-error { color:#B00020; font-size:12px; margin-top:4px; display:none; }
+    .session-banner { display:none; background:#FFF0F1; border:1px solid #FFC1C4; border-radius:12px; padding:10px 12px; margin:0 12px 12px; color:#C62828; font-size:14px; }
+
+    /* Overlay/dialog chung */
+    .overlay{
+      position:fixed; inset:0; background:rgba(15,15,15,.5); display:none; justify-content:center; align-items:center; z-index:999;
+      padding:16px; backdrop-filter:blur(4px);
     }
-
-    .logo-text .slogan {
-      font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      margin-top: 4px;
-      color: #FFEAEA;
-      font-weight: 400;
+    .overlay.active{display:flex}
+    body.popup-active #main-content{filter:blur(4px); pointer-events:none}
+    .dialog{
+      background:#fff; padding:24px 20px 20px; border-radius:20px; width:100%; max-width:420px; position:relative;
+      box-shadow:0 16px 40px rgba(0,0,0,.18); border:1px solid #F3F3F3; animation:popupIn .25s ease;
     }
-
-    .header-right {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 12px;
-      width: 100%;
+    @keyframes popupIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+    .close-btn{
+      position:absolute; top:12px; right:12px; width:40px; height:40px; background:#FFF; border:2px solid var(--red);
+      border-radius:10px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+      box-shadow:0 2px 8px rgba(0,0,0,.08); transition:background .15s, box-shadow .15s, transform .05s;
     }
+    .close-btn:hover{background:#FFEBEE}
+    .close-btn:active{transform:translateY(1px)}
+    .close-btn .x{font-size:18px; line-height:1; color:var(--red); font-weight:700}
 
-    .signup-button,
-    .login-button {
-      background: #C62828;
-      border-radius: 12px;
-      padding: 8px 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      color: white;
-      font-weight: 600;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      text-decoration: none;
-      display: inline-block;
-      transition: background 0.3s ease;
-      width: 120px;
-      text-align: center;
+    /* Popup 1: chọn vai trò */
+    .role-title{margin:4px 0 8px; font-size:20px; color:var(--red); font-family:'Playfair Display',serif}
+    .role-subtitle{margin:0 0 16px; font-size:14px; color:#666}
+    .role-actions{display:grid; grid-template-columns:1fr; gap:10px; margin-top:8px}
+    @media(min-width:420px){.role-actions{grid-template-columns:1fr 1fr}}
+    .role-btn{
+      width:100%; padding:12px; font-size:15px; font-weight:700; border-radius:12px; cursor:pointer; min-height:44px;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px; border:2px solid transparent;
+      transition:background .15s, transform .05s, box-shadow .15s, border-color .15s;
     }
+    .role-btn:active{transform:translateY(1px)}
+    .btn-customer{background:#FFF7F8; color:var(--red); border-color:#F8B6BE}
+    .btn-customer:hover{background:#FFEBEE}
+    .btn-expert{background:var(--red); color:#fff; border-color:var(--red-dark)}
+    .btn-expert:hover{background:var(--red-dark)}
 
-    .signup-button {
-      background: #FFEBEE;
-      color: #C62828;
-      border: 1px solid #C62828;
+    /* Popup 2: form đăng nhập khách hàng */
+    .form-title{margin:4px 0 12px; font-size:20px; color:var(--red); font-family:'Playfair Display',serif}
+    .form-desc{margin:0 0 16px; font-size:14px; color:#666}
+    .form{display:grid; gap:12px}
+    .field{display:grid; gap:6px}
+    .label{font-size:13px; color:#444; font-weight:600}
+    .input{
+      width:100%; padding:12px 12px; border:1.5px solid var(--field-bd); border-radius:var(--field-br); background:#fff;
+      font-size:15px; outline:none; transition:border-color .15s, box-shadow .15s;
     }
+    .input:focus{border-color:var(--red); box-shadow:0 0 0 3px rgba(198,40,40,.15)}
+    .help{font-size:12px; color:#888}
 
-    .signup-button:hover {
-      background: #ffcdd2;
+    /* Autocomplete gợi ý */
+    .suggest { position:relative; }
+    #locList { position:absolute; z-index:2; left:0; right:0; margin:4px 0 0; padding:6px; background:#fff; border:1px solid #eee; border-radius:10px; max-height:220px; overflow:auto; list-style:none; }
+
+    /* Khối action địa chỉ */
+    .location-actions{
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      gap:8px; margin-top:2px;
     }
-
-    .login-button:hover {
-      background: #b71c1c;
+    .btn-secondary{
+      background:#FFF7F8; color:var(--red); border:2px solid #F8B6BE; border-radius:12px;
+      padding:10px 12px; font-weight:700; font-size:14px; cursor:pointer; min-height:40px;
+      transition:background .15s, transform .05s, border-color .15s;
     }
-
-    @media (min-width: 481px) {
-      .header-left {
-        align-items: flex-start;
-        text-align: left;
-      }
-
-      .header-right {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
-        width: auto;
-      }
+    .btn-secondary:hover{background:#FFEBEE}
+    .btn-secondary:active{transform:translateY(1px)}
+    .map-link{
+      font-size:14px; color:var(--red); text-decoration:none; font-weight:700;
+      padding:8px 10px; border-radius:10px; background:#FFF7F8; border:1px dashed #F8B6BE;
     }
+    .map-link[aria-disabled="true"]{opacity:.6; pointer-events:none}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      padding: 0 16px 24px;
+    /* Popup 3: chọn vị trí trên bản đồ */
+    .map-dialog .form-title{margin-bottom:8px}
+    #pickMap{width:100%; height:340px; border-radius:12px; overflow:hidden; border:1px solid #eee}
+    .map-actions{display:flex; gap:8px; margin-top:12px; justify-content:flex-end}
+    .btn-outline{
+      background:#fff; color:#444; border:2px solid #ddd; border-radius:12px; padding:10px 12px; font-weight:700; font-size:14px; cursor:pointer;
     }
+    .btn-outline:hover{background:#f9f9f9}
+    .btn-confirm{
+      background:var(--red); color:#fff; border:none; border-radius:12px; padding:10px 14px; font-weight:700; font-size:14px; cursor:pointer;
+    }
+    .btn-confirm:hover{background:var(--red-dark)}
 
-    .card {
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 20px;
-      padding: 16px 12px;
-      text-align: center;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-      border: 1px solid #FFCDD2;
-      transition: transform 0.25s ease;
-      cursor: pointer;
-      user-select: none;
-      text-decoration: none;
-      color: inherit;
-      display: block;
+    .actions{display:grid; gap:10px; margin-top:6px}
+    .btn-primary{
+      background:var(--red); color:#fff; border:none; border-radius:12px; padding:12px; font-weight:700; font-size:15px; cursor:pointer;
+      min-height:44px; transition:background .15s, transform .05s, box-shadow .15s;
     }
+    .btn-primary:hover{background:var(--red-dark)}
+    .btn-primary:active{transform:translateY(1px)}
+    .note{font-size:12px; color:#777; text-align:center}
 
-    .card:hover {
-      transform: translateY(-4px);
+    @media(min-width:481px){
+      .header-left{align-items:flex-start; text-align:left; flex:1 1 auto}
+      .header-right{flex:0 0 auto; width:auto; flex-direction:column; gap:8px}
+      .logo-text h1{font-size:26px} .logo-text .slogan{font-size:18px}
     }
-
-    .card p {
-      margin-top: 10px;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 12px 0;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
-      border-top-left-radius: 16px;
-      border-top-right-radius: 16px;
-      z-index: 10;
-    }
-
-    .bottom-nav a {
-      flex: 1;
-      text-align: center;
-      font-size: 24px;
-      color: #C62828;
-      text-decoration: none;
-      padding: 10px 0;
-      transition: background 0.3s ease;
-    }
-
-    .bottom-nav a:hover {
-      background: #FFEBEE;
-      border-radius: 12px;
-    }
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   </style>
 </head>
 <body>
@@ -201,7 +191,7 @@
     <header>
       <div class="header-left">
         <div class="logo-icon">
-          <img src="images/icon-512.png" alt="Logo Ở Đây Có Gì?" />
+          <img src="images/icon-512.png" alt="Logo Ở Đây Có Gì?" width="52" height="52" loading="eager" />
         </div>
         <div class="logo-text">
           <h1>Ở Đây Có Gì?</h1>
@@ -209,179 +199,956 @@
         </div>
       </div>
       <div class="header-right">
-        <a href="dang-ky.html?v=" + new Date().getTime class="signup-button">📝 Đăng ký</a>
-        <a href="#" class="login-button" onclick="openPopup()">🔐 Đăng nhập</a>
+        <a id="signupLink" href="dang-ky.html" class="signup-button" aria-label="Đăng ký">
+          <span class="emoji" aria-hidden="true">📝</span><span>Đăng ký</span>
+        </a>
+        <button type="button" class="login-button" id="loginBtn" aria-haspopup="dialog" aria-controls="overlay" aria-expanded="false">
+          <span class="emoji" aria-hidden="true">🔐</span><span>Đăng nhập</span>
+        </button>
       </div>
     </header>
+
+    <!-- Section hồ sơ của bạn sẽ được chèn ngay dưới header bằng JS khi đăng nhập -->
+
     <section>
       <h2>Dịch vụ yêu thích</h2>
       <div class="grid">
-        <a href="bando.html" class="card">💸<p>Đặt xe</p></a>
-        <a href="trasua.html" class="card">🧾<p>Đặt nước</p></a>
-        <a href="lamdep.html" class="card">📷<p>Làm đẹp - Sức khỏe</p></a>
-        <a href="donTre.html" class="card">💳<p>Đón trẻ</p></a>
-        <a href="vanchuyen.html" class="card">🐷<p>Vận chuyển</p></a>
-        <a href="laodong.html" class="card">🛍️<p>Giao hàng</p></a>
-        <a href="laodong.html" class="card">🛍️<p>Tìm việc làm</p></a>
-        <a href="laodong.html" class="card">🛍️<p>Rao vặt</p></a>
-        <a href="laodong.html" class="card">🛍️<p>Mở cửa hàng</p></a>
+        <a href="bando.html" class="card" aria-label="Đặt xe"><span class="emoji" aria-hidden="true">💸</span><p>Đặt xe</p></a>
+        <a href="trasua.html" class="card" aria-label="Đặt nước"><span class="emoji" aria-hidden="true">🧾</span><p>Đặt nước</p></a>
+        <a href="lamdep.html" class="card" aria-label="Làm đẹp và Sức khỏe"><span class="emoji" aria-hidden="true">📷</span><p>Làm đẹp - Sức khỏe</p></a>
+        <a href="donTre.html" class="card" aria-label="Đón trẻ"><span class="emoji" aria-hidden="true">💳</span><p>Đón trẻ</p></a>
+        <a href="vanchuyen.html" class="card" aria-label="Vận chuyển"><span class="emoji" aria-hidden="true">🐷</span><p>Vận chuyển</p></a>
+        <a href="laodong.html" class="card" aria-label="Giao hàng"><span class="emoji" aria-hidden="true">🛍️</span><p>Giao hàng</p></a>
+        <a href="laodong.html" class="card" aria-label="Tìm việc làm"><span class="emoji" aria-hidden="true">🛍️</span><p>Tìm việc làm</p></a>
+        <a href="laodong.html" class="card" aria-label="Rao vặt"><span class="emoji" aria-hidden="true">🛍️</span><p>Rao vặt</p></a>
+        <a href="laodong.html" class="card" aria-label="Mở cửa hàng"><span class="emoji" aria-hidden="true">🛍️</span><p>Mở cửa hàng</p></a>
       </div>
     </section>
 
     <section>
       <h2>Trà sữa</h2>
       <div class="grid">
-        <a href="trasua1.html" class="card">📊<p>Trà sữa 1</p></a>
-        <a href="trasua2.html" class="card">🪙<p>Trà sữa 2</p></a>
-        <a href="trasua3.html" class="card">📚<p>Trà sữa 3</p></a>
-        <a href="trasua4.html" class="card">🛡️<p>Trà sữa 4</p></a>
-        <a href="trasua5.html" class="card">🐞<p>Trà sữa 5</p></a>
-        <a href="trasua6.html" class="card">📈<p>Trà sữa 6</p></a>
-        <a href="trasua7.html" class="card">💰<p>Trà sữa 7</p></a>
-        <a href="trasua8.html" class="card">📱<p>Trà sữa 8</p></a>
-        <a href="trasua9.html" class="card">✈️<p>Trà sữa 9</p></a>
-        <a href="trasua10.html" class="card">🎓<p>Trà sữa 10</p></a>
-        <a href="trasua11.html" class="card">❤️<p>Trà sữa 11</p></a>
-        <a href="trasua12.html" class="card">💬<p>Trà sữa 12</p></a>
+        <a href="trasua1.html" class="card" aria-label="Trà sữa 1"><span class="emoji" aria-hidden="true">📊</span><p>Trà sữa 1</p></a>
+        <a href="trasua2.html" class="card" aria-label="Trà sữa 2"><span class="emoji" aria-hidden="true">🪙</span><p>Trà sữa 2</p></a>
+        <a href="trasua3.html" class="card" aria-label="Trà sữa 3"><span class="emoji" aria-hidden="true">📚</span><p>Trà sữa 3</p></a>
+        <a href="trasua4.html" class="card" aria-label="Trà sữa 4"><span class="emoji" aria-hidden="true">🛡️</span><p>Trà sữa 4</p></a>
+        <a href="trasua5.html" class="card" aria-label="Trà sữa 5"><span class="emoji" aria-hidden="true">🐞</span><p>Trà sữa 5</p></a>
+        <a href="trasua6.html" class="card" aria-label="Trà sữa 6"><span class="emoji" aria-hidden="true">📈</span><p>Trà sữa 6</p></a>
+        <a href="trasua7.html" class="card" aria-label="Trà sữa 7"><span class="emoji" aria-hidden="true">💰</span><p>Trà sữa 7</p></a>
+        <a href="trasua8.html" class="card" aria-label="Trà sữa 8"><span class="emoji" aria-hidden="true">📱</span><p>Trà sữa 8</p></a>
+        <a href="trasua9.html" class="card" aria-label="Trà sữa 9"><span class="emoji" aria-hidden="true">✈️</span><p>Trà sữa 9</p></a>
+        <a href="trasua10.html" class="card" aria-label="Trà sữa 10"><span class="emoji" aria-hidden="true">🎓</span><p>Trà sữa 10</p></a>
+        <a href="trasua11.html" class="card" aria-label="Trà sữa 11"><span class="emoji" aria-hidden="true">❤️</span><p>Trà sữa 11</p></a>
+        <a href="trasua12.html" class="card" aria-label="Trà sữa 12"><span class="emoji" aria-hidden="true">💬</span><p>Trà sữa 12</p></a>
       </div>
     </section>
 
     <section>
       <h2>Trà trái cây</h2>
       <div class="grid">
-        <a href="tratraicay1.html" class="card">🍓<p>Trà trái cây 1</p></a>
-        <a href="tratraicay2.html" class="card">🍍<p>Trà trái cây 2</p></a>
-        <a href="tratraicay3.html" class="card">🍑<p>Trà trái cây 3</p></a>
-        <a href="tratraicay4.html" class="card">🍋<p>Trà trái cây 4</p></a>
-        <a href="tratraicay5.html" class="card">🍇<p>Trà trái cây 5</p></a>
-        <a href="tratraicay6.html" class="card">🥭<p>Trà trái cây 6</p></a>
-        <a href="tratraicay7.html" class="card">🍉<p>Trà trái cây 7</p></a>
-        <a href="tratraicay8.html" class="card">🍊<p>Trà trái cây 8</p></a>
-        <a href="tratraicay9.html" class="card">🍏<p>Trà trái cây 9</p></a>
-        <a href="tratraicay10.html" class="card">🍈<p>Trà trái cây 10</p></a>
-        <a href="tratraicay11.html" class="card">🍒<p>Trà trái cây 11</p></a>
-        <a href="tratraicay12.html" class="card">🥝<p>Trà trái cây 12</p></a>
+        <a href="tratraicay1.html" class="card" aria-label="Trà trái cây 1"><span class="emoji" aria-hidden="true">🍓</span><p>Trà trái cây 1</p></a>
+        <a href="tratraicay2.html" class="card" aria-label="Trà trái cây 2"><span class="emoji" aria-hidden="true">🍍</span><p>Trà trái cây 2</p></a>
+        <a href="tratraicay3.html" class="card" aria-label="Trà trái cây 3"><span class="emoji" aria-hidden="true">🍑</span><p>Trà trái cây 3</p></a>
+        <a href="tratraicay4.html" class="card" aria-label="Trà trái cây 4"><span class="emoji" aria-hidden="true">🍋</span><p>Trà trái cây 4</p></a>
+        <a href="tratraicay5.html" class="card" aria-label="Trà trái cây 5"><span class="emoji" aria-hidden="true">🍇</span><p>Trà trái cây 5</p></a>
+        <a href="tratraicay6.html" class="card" aria-label="Trà trái cây 6"><span class="emoji" aria-hidden="true">🥭</span><p>Trà trái cây 6</p></a>
+        <a href="tratraicay7.html" class="card" aria-label="Trà trái cây 7"><span class="emoji" aria-hidden="true">🍉</span><p>Trà trái cây 7</p></a>
+        <a href="tratraicay8.html" class="card" aria-label="Trà trái cây 8"><span class="emoji" aria-hidden="true">🍊</span><p>Trà trái cây 8</p></a>
+        <a href="tratraicay9.html" class="card" aria-label="Trà trái cây 9"><span class="emoji" aria-hidden="true">🍏</span><p>Trà trái cây 9</p></a>
+        <a href="tratraicay10.html" class="card" aria-label="Trà trái cây 10"><span class="emoji" aria-hidden="true">🍈</span><p>Trà trái cây 10</p></a>
+        <a href="tratraicay11.html" class="card" aria-label="Trà trái cây 11"><span class="emoji" aria-hidden="true">🍒</span><p>Trà trái cây 11</p></a>
+        <a href="tratraicay12.html" class="card" aria-label="Trà trái cây 12"><span class="emoji" aria-hidden="true">🥝</span><p>Trà trái cây 12</p></a>
       </div>
     </section>
 
-    <nav class="bottom-nav">
-      <a href="index.html">🏠</a>
-      <a href="thongbao.html">🔔</a>
-      <a href="lienhe.html">📞</a>
-      <a href="taikhoan.html">👤</a>
-    </nav>
-  </div> <!-- Kết thúc #main-content -->
+    <!-- Footer -->
+    <footer class="site-footer" aria-label="Chân trang">
+      <div class="footer-links">
+        <a href="terms.html">Điều khoản sử dụng</a>
+        <a href="privacy.html">Chính sách quyền riêng tư</a>
+      </div>
+      <div>© 2025 Ở Đây Có Gì?</div>
+    </footer>
 
-  <!-- POPUP CHỌN VAI TRÒ -->
-  <div class="overlay" id="popup">
-    <div class="role-box">
-      <span class="close-btn" onclick="closePopup()">❌</span>
-      <h2>Bạn muốn tiếp tục với vai trò nào?</h2>
-      <button onclick="selectRole('user')">👤 Tôi muốn sử dụng dịch vụ</button>
-      <button onclick="selectRole('provider')">🛠️ Tôi là người làm dịch vụ</button>
+    <nav class="bottom-nav" aria-label="Điều hướng chính" id="bottomNav">
+      <a href="index.html" aria-label="Trang chủ"><span class="emoji" aria-hidden="true">🏠</span></a>
+      <a href="thongbao.html" aria-label="Thông báo"><span class="emoji" aria-hidden="true">🔔</span></a>
+      <a href="lienhe.html" aria-label="Liên hệ"><span class="emoji" aria-hidden="true">📞</span></a>
+      <a href="taikhoan.html" aria-label="Tài khoản"><span class="emoji" aria-hidden="true">👤</span></a>
+    </nav>
+  </div>
+  <!-- Overlay + Dialogs -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogDesc">
+    <!-- Dialog 1: Chọn vai trò -->
+    <div class="dialog" id="roleBox" hidden>
+      <button class="close-btn" type="button" id="closeRole" aria-label="Đóng cửa sổ">
+        <span class="x" aria-hidden="true">✕</span>
+      </button>
+      <h2 class="role-title" id="dialogTitle">Chọn vai trò để tiếp tục</h2>
+      <p class="role-subtitle" id="dialogDesc">Vui lòng chọn vai trò phù hợp để chúng tôi điều hướng bạn đến đúng nơi.</p>
+      <div class="role-actions">
+        <button type="button" id="roleCustomer" class="role-btn btn-customer" aria-label="Bạn là khách hàng">
+          <span aria-hidden="true">👤</span> Bạn là khách hàng
+        </button>
+        <button type="button" id="roleExpert" class="role-btn btn-expert" aria-label="Bạn là chuyên gia">
+          <span aria-hidden="true">🧠</span> Bạn là chuyên gia
+        </button>
+      </div>
+      <p class="help" style="text-align:center;margin-top:10px;">
+        Khi tiếp tục, bạn chấp nhận
+        <a href="terms.html" target="_blank" rel="noopener">Điều khoản sử dụng</a> và
+        <a href="privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a>.
+      </p>
+    </div>
+
+    <!-- Dialog 2: Đăng nhập khách hàng -->
+    <div class="dialog" id="customerBox" hidden aria-labelledby="customerTitle" aria-describedby="customerDesc">
+      <button class="close-btn" type="button" id="closeCustomer" aria-label="Đóng cửa sổ">
+        <span class="x" aria-hidden="true">✕</span>
+      </button>
+      <h2 class="form-title" id="customerTitle">Đăng nhập khách hàng</h2>
+      <p class="form-desc" id="customerDesc">Nhập thông tin của bạn để tiếp tục sử dụng dịch vụ.</p>
+
+      <!-- Autocomplete gợi ý địa chỉ -->
+      <div class="field">
+        <label class="label" for="locSearch">Tìm nhanh địa chỉ</label>
+        <input class="input" type="text" id="locSearch" placeholder="Nhập tên đường, phường, quận, thành phố..." autocomplete="off" />
+        <div id="locSuggest" class="suggest" style="display:none;">
+          <ul id="locList"></ul>
+        </div>
+        <span class="help">Chọn một gợi ý để điền địa chỉ ngay.</span>
+      </div>
+
+      <form class="form" id="customerForm" novalidate>
+        <div class="field">
+          <label class="label" for="cusName">Tên khách hàng</label>
+          <input class="input" type="text" id="cusName" name="name" placeholder="Nguyễn Văn A" autocomplete="name" required />
+        </div>
+
+        <div class="field">
+          <label class="label" for="cusPhone">Số điện thoại</label>
+          <input class="input" type="tel" id="cusPhone" name="phone" placeholder="09xx xxx xxx" inputmode="tel" autocomplete="tel" pattern="^0[0-9]{9,10}$" required />
+          <span class="help">Nhập số di động Việt Nam, bắt đầu bằng 0.</span>
+        </div>
+
+        <div class="field">
+          <label class="label" for="cusLocation">Vị trí</label>
+          <input class="input" type="text" id="cusLocation" name="location" placeholder="Phường/Quận/Thành phố" autocomplete="street-address" required />
+          <div class="location-actions">
+            <button type="button" id="getLocationBtn" class="btn-secondary">📍 Lấy địa chỉ hiện tại</button>
+            <a id="viewMapLink" class="map-link" href="#" target="_blank" rel="noopener" aria-disabled="true">vị trí của bạn</a>
+            <button type="button" id="pickOnMapBtn" class="btn-secondary">🗺️ Chọn trên bản đồ</button>
+          </div>
+          <span class="help" id="locHelp">Cho phép quyền vị trí để tự động điền địa chỉ, hoặc chọn trên bản đồ.</span>
+        </div>
+
+        <!-- Đồng ý điều khoản & quyền riêng tư -->
+        <div class="consent">
+          <input id="consentCustomer" type="checkbox" required aria-describedby="consentCustomerErr">
+          <label for="consentCustomer">
+            Tôi đồng ý <a href="terms.html" target="_blank" rel="noopener">Điều khoản sử dụng</a> và
+            <a href="privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a>.
+          </label>
+        </div>
+        <div id="consentCustomerErr" class="consent-error">Bạn cần đồng ý Điều khoản và Chính sách để tiếp tục.</div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary" id="customerLoginBtn">Đăng nhập</button>
+          <div class="note">Bằng cách tiếp tục, bạn đồng ý với điều khoản và chính sách của chúng tôi.</div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Dialog 3: Chọn vị trí trên bản đồ -->
+    <div class="dialog map-dialog" id="mapBox" hidden aria-labelledby="mapTitle">
+      <button class="close-btn" type="button" id="closeMap" aria-label="Đóng bản đồ">
+        <span class="x" aria-hidden="true">✕</span>
+      </button>
+      <h2 class="form-title" id="mapTitle">Chọn vị trí trên bản đồ</h2>
+      <div id="pickMap" role="application" aria-label="Bản đồ chọn vị trí"></div>
+      <div class="map-actions">
+        <button type="button" class="btn-outline" id="mapMyLoc">📍 Đưa ghim về vị trí của tôi</button>
+        <button type="button" class="btn-confirm" id="mapConfirm">Xác nhận vị trí</button>
+      </div>
+      <div class="help" id="mapHelp" style="margin-top:6px;">Kéo ghim đến vị trí mong muốn, sau đó bấm Xác nhận.</div>
     </div>
   </div>
 
-  <style>
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(33, 33, 33, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .overlay.active {
-      display: flex;
-    }
-
-    .role-box {
-      background: white;
-      padding: 32px;
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      text-align: center;
-      width: 90%;
-      max-width: 320px;
-      position: relative;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .role-box h2 {
-      margin-bottom: 24px;
-      font-size: 20px;
-      color: #C62828;
-    }
-
-    .role-box button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 16px;
-      font-weight: 600;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .role-box button:first-of-type {
-      background: #C62828;
-      color: white;
-    }
-
-    .role-box button:last-of-type {
-      background: #FFEBEE;
-      color: #C62828;
-      border: 1px solid #C62828;
-    }
-
-    .role-box button:hover {
-      opacity: 0.9;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      font-size: 20px;
-      cursor: pointer;
-      color: #888;
-    }
-
-    body.popup-active #main-content {
-      filter: blur(6px);
-      pointer-events: none;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-  </style>
-
+  <!-- Scripts: core behaviors, login, profile render, session ping -->
   <script>
-    function openPopup() {
-      document.getElementById("popup").classList.add("active");
-      document.body.classList.add("popup-active");
+    // URLs
+    const WEB_APP_MAIN = 'https://script.google.com/macros/s/AKfycbwfeWkWWGllDaAD0ZhARdJ1UvOYwDalBF1rYUKWeD3178lqEB5g5qTv0aIBFu3RqW4Z/exec'; // app chính
+    const WEB_APP_INFO = 'https://script.google.com/macros/s/AKfycbz89ganqrguJnrd9rbJQawgkhfGNQMuP3R1mE1Y774_J3_30c-QGGkDfYqWhR90lLoW/exec'; // app thông tin KH (fetch_by_phone)
+
+    // Elements
+    const bottomNav = document.getElementById('bottomNav');
+    const overlay = document.getElementById('overlay');
+    const roleBox = document.getElementById('roleBox');
+    const customerBox = document.getElementById('customerBox');
+    const mapBox = document.getElementById('mapBox');
+
+    const loginBtn = document.getElementById('loginBtn');
+    const signupLink = document.getElementById('signupLink');
+    const closeRole = document.getElementById('closeRole');
+    const closeCustomer = document.getElementById('closeCustomer');
+    const closeMap = document.getElementById('closeMap');
+
+    const roleCustomerBtn = document.getElementById('roleCustomer');
+    const roleExpertBtn = document.getElementById('roleExpert');
+
+    const customerForm = document.getElementById('customerForm');
+    const cusName = document.getElementById('cusName');
+    const cusPhone = document.getElementById('cusPhone');
+    const cusLocation = document.getElementById('cusLocation');
+    const locHelp = document.getElementById('locHelp');
+
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const pickOnMapBtn = document.getElementById('pickOnMapBtn');
+    const viewMapLink = document.getElementById('viewMapLink');
+
+    const locSearch = document.getElementById('locSearch');
+    const locSuggest = document.getElementById('locSuggest');
+    const locList = document.getElementById('locList');
+
+    const consentCustomer = document.getElementById('consentCustomer');
+    const consentCustomerErr = document.getElementById('consentCustomerErr');
+    const customerLoginBtn = document.getElementById('customerLoginBtn');
+
+    // Anti-cache for signup
+    if (signupLink) {
+      signupLink.addEventListener('click', function(){
+        const url = new URL(this.href, location.origin);
+        url.searchParams.set('v', Date.now().toString());
+        this.href = url.toString();
+      });
     }
 
-    function closePopup() {
-      document.getElementById("popup").classList.remove("active");
-      document.body.classList.remove("popup-active");
+    // Overlay open/close
+    function openOverlay(){
+      overlay.classList.add('active');
+      document.body.classList.add('popup-active');
+      loginBtn.setAttribute('aria-expanded','true');
+      showRoleDialog();
+      document.addEventListener('keydown', handleKeydown);
+    }
+    function closeOverlay(){
+      overlay.classList.remove('active');
+      document.body.classList.remove('popup-active');
+      loginBtn.setAttribute('aria-expanded','false');
+      loginBtn.focus();
+      document.removeEventListener('keydown', handleKeydown);
+      roleBox.hidden = true; customerBox.hidden = true; mapBox.hidden = true;
     }
 
-    function selectRole(role) {
-      if (role === 'user') {
-        window.location.href = "dich-vu.html";
+    // Show dialogs
+    function showRoleDialog(){
+      roleBox.hidden = false; customerBox.hidden = true; mapBox.hidden = true;
+      setTimeout(()=>roleCustomerBtn.focus(),0);
+    }
+    function showCustomerDialog(){
+      roleBox.hidden = true; customerBox.hidden = false; mapBox.hidden = true;
+      setTimeout(()=>cusName.focus(),0);
+    }
+    function showMapDialog(){
+      roleBox.hidden = true; customerBox.hidden = true; mapBox.hidden = false;
+      setTimeout(()=>document.getElementById('mapTitle').focus?.(), 0);
+    }
+
+    // Focus trap
+    function handleKeydown(e){
+      if(e.key === 'Escape'){ closeOverlay(); return; }
+      if(e.key !== 'Tab') return;
+      const scope = !roleBox.hidden ? roleBox : (!customerBox.hidden ? customerBox : mapBox);
+      const selectors = 'a[href],area[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+      const focusables = Array.from(scope.querySelectorAll(selectors)).filter(el => el.offsetParent !== null);
+      if(!focusables.length) return;
+      const first = focusables[0], last = focusables[focusables.length-1];
+      if(e.shiftKey && document.activeElement === first){ last.focus(); e.preventDefault(); }
+      else if(!e.shiftKey && document.activeElement === last){ first.focus(); e.preventDefault(); }
+    }
+
+    // Bind overlay/dialog
+    loginBtn.addEventListener('click', openOverlay);
+    closeRole.addEventListener('click', closeOverlay);
+    closeCustomer.addEventListener('click', closeOverlay);
+    closeMap.addEventListener('click', () => { showCustomerDialog(); });
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeOverlay(); });
+
+    roleCustomerBtn.addEventListener('click', showCustomerDialog);
+    roleExpertBtn.addEventListener('click', ()=>{ window.location.href = 'dang-nhap.html'; });
+
+    // Consent hide error
+    consentCustomer.addEventListener('change', ()=>{
+      if(consentCustomer.checked) consentCustomerErr.style.display = 'none';
+    });
+
+    // Utils
+    function ensureDeviceId(){
+      let id = localStorage.getItem('odcg_device_id');
+      if(!id){
+        id = (crypto.randomUUID ? crypto.randomUUID() : ('dev-' + Date.now() + '-' + Math.random()));
+        localStorage.setItem('odcg_device_id', id);
+      }
+      return id;
+    }
+    async function postFormJSON(url, params){
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(params)
+      });
+      const text = await res.text();
+      try { return JSON.parse(text); } catch { return { ok:false, message:text }; }
+    }
+
+    // Render profile block right under header and toggle auth buttons
+    function insertProfileSection(element) {
+      const main = document.getElementById('main-content');
+      const afterHeader = document.querySelector('header').nextElementSibling;
+      main.insertBefore(element, afterHeader || main.firstChild);
+    }
+    function setAuthButtonsVisibility(isLoggedIn) {
+      const login = document.getElementById('loginBtn');
+      const signup = document.getElementById('signupLink');
+      if (login) login.style.display = isLoggedIn ? 'none' : '';
+      if (signup) signup.style.display = '';
+    }
+    function showSessionBannerUI(message) {
+      const banner = document.getElementById('sessionBanner');
+      const msg = document.getElementById('sessionBannerMsg');
+      if (!banner || !msg) return;
+      if (!message) { banner.style.display = 'none'; msg.textContent = ''; return; }
+      msg.textContent = message;
+      banner.style.display = 'block';
+    }
+
+    // Render 3 trường + link "vị trí của bạn" (ưu tiên mapUrl) + Logout
+    function renderBasicCustomerInfo({ name, phone, location, mapUrl }) {
+      let box = document.getElementById('customerBasic');
+      if (!box) {
+        box = document.createElement('section');
+        box.id = 'customerBasic';
+        box.innerHTML = `
+          <div class="session-banner" id="sessionBanner">
+            <strong>Cảnh báo:</strong> <span id="sessionBannerMsg"></span>
+          </div>
+          <h2>Hồ sơ của bạn</h2>
+          <div class="card">
+            <p><strong>Tên:</strong> <span id="basicName"></span></p>
+            <p><strong>SĐT:</strong> <span id="basicPhone"></span></p>
+            <p><strong>Địa chỉ:</strong> 
+              <span id="basicLoc"></span>
+              <a id="basicMap" target="_blank" rel="noopener">vị trí của bạn</a>
+            </p>
+            <div class="location-actions" style="margin-top:8px;">
+              <button type="button" id="btnLogout" class="btn-secondary">🚪 Đăng xuất</button>
+            </div>
+          </div>
+        `;
+        insertProfileSection(box);
+      }
+      document.getElementById('basicName').textContent = name || '';
+      document.getElementById('basicPhone').textContent = phone || '';
+      document.getElementById('basicLoc').textContent = location || '';
+
+      const map = document.getElementById('basicMap');
+      if (mapUrl) {
+        map.href = mapUrl;
+        map.style.display = '';
+      } else if (location) {
+        map.href = `https://maps.google.com/?q=${encodeURIComponent(location)}`;
+        map.style.display = '';
       } else {
-        window.location.href = "dang-nhap.html";
+        map.href = '#';
+        map.style.display = 'none';
+      }
+
+      const btnLogout = document.getElementById('btnLogout');
+      if (btnLogout) btnLogout.onclick = apiLogout;
+
+      setAuthButtonsVisibility(true);
+    }
+    function removeBasicCustomerInfo() {
+      const box = document.getElementById('customerBasic');
+      if (box && box.parentNode) box.parentNode.removeChild(box);
+      setAuthButtonsVisibility(false);
+    }
+
+    // WEB APP INFO: lấy 3 trường theo SĐT (trả { ok, customer: {name, phone, location, mapUrl} })
+    async function fetchCustomerInfoByPhone(phone) {
+      return postFormJSON(WEB_APP_INFO, { action:'fetch_by_phone', phone });
+    }
+
+    // LOGIN: chấp nhận JSON hoặc TEXT, đóng popup ngay và render UI (ưu tiên mapUrl)
+    async function loginUser({ name, phone, location, deviceId }) {
+      const res = await fetch(WEB_APP_MAIN, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action:'login_user', name, phone, location, deviceId })
+      });
+      const text = await res.text();
+      try {
+        const json = JSON.parse(text);
+        if (json && json.ok && json.sessionId) return { ok:true, sessionId: json.sessionId, customer: json.customer || null };
+      } catch {}
+      if (/^Đăng nhập thành công/i.test(text)) {
+        const m = text.match(/SESSION:([A-Za-z0-9\-]+)/);
+        return { ok:true, sessionId:(m ? m[1] : null), customer:null };
+      }
+      return { ok:false, message: text || 'Đăng nhập thất bại' };
+    }
+
+    // Submit
+    customerForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const name = cusName.value.trim();
+      const phone = cusPhone.value.trim().replace(/\s+/g,'');
+      const loc = cusLocation.value.trim();
+      if(!name){ cusName.focus(); return; }
+      if(!/^0[0-9]{9,10}$/.test(phone)){ cusPhone.focus(); return; }
+      if(!loc){ cusLocation.focus(); return; }
+      if(!consentCustomer.checked){ consentCustomerErr.style.display='block'; consentCustomer.focus(); return; }
+      consentCustomerErr.style.display='none';
+
+      const deviceId = ensureDeviceId();
+
+      try{
+        customerLoginBtn.disabled = true;
+        customerLoginBtn.textContent = '⏳ Đang đăng nhập...';
+
+        const result = await loginUser({ name, phone, location: loc, deviceId });
+        if (!result.ok) {
+          const msg = result.message || 'Đăng nhập thất bại';
+          if (/khoá đăng nhập trong 24 giờ/i.test(msg)) alert('Số điện thoại này đang tạm bị khoá đăng nhập trong 24 giờ.');
+          else alert(msg);
+          return;
+        }
+
+        const customer = result.customer || { name, phone, location: loc, mapUrl: '', updatedAt: '' };
+        localStorage.setItem('odcg_customer', JSON.stringify({
+          name: customer.name, phone: customer.phone, location: customer.location,
+          mapUrl: customer.mapUrl || '', updatedAt: customer.updatedAt || '',
+          sessionId: result.sessionId, deviceId, t: Date.now()
+        }));
+
+        // Đóng popup và render hồ sơ ngay
+        closeOverlay();
+        renderBasicCustomerInfo({ name: customer.name, phone: customer.phone, location: customer.location, mapUrl: customer.mapUrl });
+
+        // Lấy lại info từ web app info (không chặn UI)
+        try {
+          const infoRes = await fetchCustomerInfoByPhone(phone);
+          if (infoRes && infoRes.ok && infoRes.customer) {
+            renderBasicCustomerInfo({
+              name: infoRes.customer.name || customer.name,
+              phone: infoRes.customer.phone || customer.phone,
+              location: infoRes.customer.location || customer.location,
+              mapUrl: infoRes.customer.mapUrl || customer.mapUrl
+            });
+          }
+        } catch {}
+
+        // Bắt đầu ping loop (định nghĩa ở phần 3)
+        if (typeof schedulePingLoop === 'function') schedulePingLoop();
+
+      } catch(err){
+        alert('Không thể đăng nhập: ' + err.message);
+      } finally {
+        customerLoginBtn.disabled = false;
+        customerLoginBtn.textContent = 'Đăng nhập';
+      }
+    });
+
+    // Logout
+    async function apiLogout(){
+      const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+      if(!session.phone || !session.deviceId || !session.sessionId){
+        localStorage.removeItem('odcg_customer'); removeBasicCustomerInfo(); return;
+      }
+      try{
+        const res = await fetch(WEB_APP_MAIN, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            action:'logout_user',
+            phone: session.phone,
+            deviceId: session.deviceId,
+            sessionId: session.sessionId
+          })
+        });
+        const text = await res.text();
+        if (text) alert(text);
+      }catch(e){
+        alert('Lỗi đăng xuất: ' + e.message);
+      }finally{
+        localStorage.removeItem('odcg_customer');
+        removeBasicCustomerInfo();
       }
     }
+
+    // Ping session minimal on load (schedule loop in part 3)
+    async function pingSession({ phone, deviceId, sessionId }) {
+      return postFormJSON(WEB_APP_MAIN, { action:'ping_session', phone, deviceId, sessionId });
+    }
+    async function restoreSessionIfAnyMinimal() {
+      const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+      if (!session.phone || !session.sessionId || !session.deviceId) { setAuthButtonsVisibility(false); return; }
+      try {
+        const pr = await pingSession({ phone: session.phone, deviceId: session.deviceId, sessionId: session.sessionId });
+        if (pr.status === 'ACTIVE') {
+          renderBasicCustomerInfo({
+            name: pr.customer?.name || session.name,
+            phone: pr.customer?.phone || session.phone,
+            location: pr.customer?.location || session.location,
+            mapUrl: pr.customer?.mapUrl || session.mapUrl
+          });
+          showSessionBannerUI('');
+          if (typeof schedulePingLoop === 'function') schedulePingLoop();
+        } else if (pr.status === 'OTHER_DEVICE') {
+          showSessionBannerUI('Số điện thoại này đang đăng nhập ở nơi khác. Phiên hiện tại đã bị đăng xuất.');
+          localStorage.removeItem('odcg_customer');
+          removeBasicCustomerInfo();
+        } else if (pr.status === 'LOCKED') {
+          showSessionBannerUI('Số điện thoại này đang tạm bị khoá đăng nhập trong 24 giờ.');
+          localStorage.removeItem('odcg_customer');
+          removeBasicCustomerInfo();
+        } else {
+          localStorage.removeItem('odcg_customer');
+          removeBasicCustomerInfo();
+        }
+      } catch {
+        setAuthButtonsVisibility(false);
+      }
+    }
+    window.addEventListener('load', restoreSessionIfAnyMinimal);
+
+    // Bottom nav padding
+    function updateBottomPadding(){
+      if(!bottomNav) return;
+      const h = Math.round(bottomNav.getBoundingClientRect().height || 64);
+      const current = getComputedStyle(document.documentElement).getPropertyValue('--bottom-nav-pad').trim();
+      const next = h + 'px';
+      if(current !== next){ document.documentElement.style.setProperty('--bottom-nav-pad', next); }
+    }
+    window.addEventListener('load', updateBottomPadding);
+    window.addEventListener('resize', updateBottomPadding);
+    if('ResizeObserver' in window && bottomNav){
+      const ro = new ResizeObserver(()=>requestAnimationFrame(updateBottomPadding));
+      ro.observe(bottomNav);
+    }
   </script>
-</body>
-</html>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+
+  <script>
+    // ====== Geolocation & address helpers ======
+    let lastCoords = null;
+    let gettingLoc = false;
+
+    function composeMapHrefFromLocationString(locStr){
+      return locStr ? `https://maps.google.com/?q=${encodeURIComponent(locStr)}` : '#';
+    }
+
+    function updateProfileMapLink({ href, show }) {
+      const basicMap = document.getElementById('basicMap');
+      if (!basicMap) return;
+      if (show && href) {
+        basicMap.href = href;
+        basicMap.style.display = '';
+      } else {
+        basicMap.href = '#';
+        basicMap.style.display = 'none';
+      }
+    }
+
+    function updateInlineMapLinks(coords){
+      // Update link in login form
+      const link = document.getElementById('viewMapLink');
+      if (link && coords) {
+        const href = `https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
+        link.href = href;
+        link.setAttribute('aria-disabled','false');
+      }
+      // Update link in profile block
+      if (coords) {
+        const href = `https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
+        updateProfileMapLink({ href, show: true });
+      }
+    }
+
+    function setGetLocationButtonState(hasCoords){
+      if(!getLocationBtn) return;
+      getLocationBtn.textContent = hasCoords ? '📍 Cập nhật lại địa chỉ' : '📍 Lấy địa chỉ hiện tại';
+      getLocationBtn.disabled = false;
+    }
+
+    async function reverseGeocode(lat, lon){
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=16&addressdetails=1`;
+      const res = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'O-Day-Co-Gi/1.0 (contact: support@example.com)'
+        }
+      });
+      if(!res.ok) throw new Error('reverse geocode failed');
+      const data = await res.json();
+      return data.display_name || '';
+    }
+
+    async function handleGetLocation(){
+      if(gettingLoc) return;
+      if(!('geolocation' in navigator)){
+        alert('Thiết bị không hỗ trợ định vị. Vui lòng nhập địa chỉ hoặc chọn trên bản đồ.');
+        return;
+      }
+      try{
+        gettingLoc = true;
+        getLocationBtn.disabled = true;
+        getLocationBtn.textContent = '⏳ Đang lấy vị trí...';
+        locHelp.textContent = 'Đang lấy vị trí, vui lòng chờ...';
+
+        const coords = await new Promise((resolve, reject)=>{
+          navigator.geolocation.getCurrentPosition(
+            pos => resolve(pos.coords),
+            err => reject(err),
+            { enableHighAccuracy:true, timeout:15000, maximumAge:0 }
+          );
+        });
+
+        lastCoords = { latitude: coords.latitude, longitude: coords.longitude };
+        updateInlineMapLinks(lastCoords);
+
+        try{
+          const address = await reverseGeocode(lastCoords.latitude, lastCoords.longitude);
+          if(address) {
+            cusLocation.value = address;
+            locHelp.textContent = 'Đã tự động điền địa chỉ của bạn. Kiểm tra lại cho chính xác.';
+            const locSpan = document.getElementById('basicLoc');
+            if (locSpan) locSpan.textContent = address;
+          } else {
+            locHelp.textContent = 'Không lấy được địa chỉ chữ. Bạn có thể xem vị trí trên bản đồ.';
+          }
+        }catch{
+          locHelp.textContent = 'Không thể chuyển toạ độ thành địa chỉ. Dùng liên kết để xem trên bản đồ.';
+        }
+
+        setGetLocationButtonState(true);
+
+        // Gửi cập nhật vị trí (im lặng) lên web app chính
+        try {
+          const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+          if (session.phone && session.deviceId) {
+            await fetch(WEB_APP_MAIN, {
+              method:'POST',
+              headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({
+                action: 'update_location',
+                phone: session.phone,
+                location: cusLocation.value.trim(),
+                deviceId: session.deviceId
+              })
+            });
+          }
+        } catch {}
+
+      }catch(err){
+        console.warn('Geolocation error:', err);
+        alert('Không thể lấy vị trí. Kiểm tra quyền truy cập vị trí hoặc dùng “Chọn trên bản đồ”.');
+        setGetLocationButtonState(!!lastCoords);
+        const link = document.getElementById('viewMapLink');
+        if(link && !lastCoords){
+          link.setAttribute('aria-disabled','true');
+          link.href = '#';
+        }
+        locHelp.textContent = 'Bạn có thể nhập địa chỉ hoặc chọn trên bản đồ nếu không cấp quyền vị trí.';
+      }finally{
+        gettingLoc = false;
+        if(!getLocationBtn) return;
+        getLocationBtn.disabled = false;
+        if(!lastCoords) getLocationBtn.textContent = '📍 Lấy địa chỉ hiện tại';
+      }
+    }
+    getLocationBtn.addEventListener('click', handleGetLocation);
+
+    // Khi người dùng sửa tay địa chỉ, nếu chưa có toạ độ thì vô hiệu map link trong form
+    cusLocation.addEventListener('input', ()=>{
+      if(!lastCoords){
+        const link = document.getElementById('viewMapLink');
+        if(link){
+          link.setAttribute('aria-disabled','true');
+          link.href = '#';
+        }
+      }
+    });
+
+    // ====== AUTOCOMPLETE (Nominatim) ======
+    let suggestTimer = null;
+    locSearch.addEventListener('input', ()=>{
+      const q = locSearch.value.trim();
+      clearTimeout(suggestTimer);
+      if(q.length < 3){
+        locSuggest.style.display = 'none';
+        locList.innerHTML = '';
+        return;
+      }
+      suggestTimer = setTimeout(()=> fetchSuggest(q), 300);
+    });
+
+    async function fetchSuggest(query){
+      try{
+        const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=8&countrycodes=vn&q=${encodeURIComponent(query)}`;
+        const res = await fetch(url, {
+          headers: {
+            'Accept': 'application/json',
+            'User-Agent': 'O-Day-Co-Gi/1.0 (contact: support@example.com)'
+          }
+        });
+        if(!res.ok) throw new Error('suggest failed');
+        const data = await res.json();
+        renderSuggest(data);
+      }catch{
+        locSuggest.style.display = 'none';
+        locList.innerHTML = '';
+      }
+    }
+
+    function renderSuggest(items){
+      locList.innerHTML = '';
+      if(!items || !items.length){
+        locSuggest.style.display = 'none';
+        return;
+      }
+      items.forEach(item=>{
+        const li = document.createElement('li');
+        li.style.margin = '0';
+        li.style.padding = '8px 10px';
+        li.style.cursor = 'pointer';
+        li.style.borderRadius = '8px';
+        li.textContent = item.display_name;
+        li.addEventListener('click', async ()=>{
+          cusLocation.value = item.display_name || '';
+          lastCoords = { latitude: parseFloat(item.lat), longitude: parseFloat(item.lon) };
+          updateInlineMapLinks(lastCoords);
+          setGetLocationButtonState(true);
+          locSuggest.style.display = 'none';
+          locList.innerHTML = '';
+          locHelp.textContent = 'Đã chọn địa chỉ từ gợi ý. Bạn có thể bấm “vị trí của bạn” để kiểm tra.';
+
+          // Đồng bộ hiển thị hồ sơ
+          const locSpan = document.getElementById('basicLoc');
+          if (locSpan) locSpan.textContent = cusLocation.value.trim();
+
+          // Gửi cập nhật vị trí im lặng
+          try {
+            const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+            if (session.phone && session.deviceId) {
+              await fetch(WEB_APP_MAIN, {
+                method:'POST',
+                headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                  action: 'update_location',
+                  phone: session.phone,
+                  location: cusLocation.value.trim(),
+                  deviceId: session.deviceId
+                })
+              });
+            }
+          } catch {}
+        });
+        li.addEventListener('mouseenter', ()=> li.style.background = '#FFF7F8');
+        li.addEventListener('mouseleave', ()=> li.style.background = 'transparent');
+        locList.appendChild(li);
+      });
+      locSuggest.style.display = 'block';
+    }
+
+    // Ẩn gợi ý khi click ra ngoài
+    document.addEventListener('click', (e)=>{
+      if(!locSuggest.contains(e.target) && e.target !== locSearch){
+        locSuggest.style.display = 'none';
+      }
+    });
+
+    // ====== MAP (Leaflet) chọn vị trí ======
+    let map, marker;
+    const defaultCenter = { lat: 10.775, lng: 106.7 }; // HCMC
+
+    function initMapIfNeeded(){
+      if(map){
+        map.invalidateSize();
+        return;
+      }
+      map = L.map('pickMap').setView([defaultCenter.lat, defaultCenter.lng], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      marker = L.marker(map.getCenter(), { draggable: true }).addTo(map);
+
+      marker.on('dragend', ()=>{
+        const { lat, lng } = marker.getLatLng();
+        document.getElementById('mapHelp').textContent = `Toạ độ tạm: ${lat.toFixed(6)}, ${lng.toFixed(6)} — bấm Xác nhận để dùng.`;
+      });
+
+      if(lastCoords){
+        marker.setLatLng([lastCoords.latitude, lastCoords.longitude]);
+        map.setView([lastCoords.latitude, lastCoords.longitude], 15);
+      }
+    }
+
+    // Mở dialog bản đồ
+    pickOnMapBtn.addEventListener('click', ()=>{
+      showMapDialog();
+      initMapIfNeeded();
+      setTimeout(()=> map && map.invalidateSize(), 50);
+    });
+
+    // Nút đưa ghim về vị trí của tôi
+    document.getElementById('mapMyLoc').addEventListener('click', async ()=>{
+      if(!('geolocation' in navigator)){
+        alert('Thiết bị không hỗ trợ định vị.');
+        return;
+      }
+      try{
+        document.getElementById('mapHelp').textContent = 'Đang lấy vị trí của bạn...';
+        const coords = await new Promise((resolve, reject)=>{
+          navigator.geolocation.getCurrentPosition(
+            pos => resolve(pos.coords),
+            err => reject(err),
+            { enableHighAccuracy:true, timeout:15000, maximumAge:0 }
+          );
+        });
+        const latlng = [coords.latitude, coords.longitude];
+        marker.setLatLng(latlng);
+        map.setView(latlng, 16);
+        document.getElementById('mapHelp').textContent = 'Đã đưa ghim về vị trí của bạn. Kéo tinh chỉnh nếu cần.';
+      }catch{
+        document.getElementById('mapHelp').textContent = 'Không thể lấy vị trí. Bạn có thể kéo ghim đến vị trí mong muốn.';
+      }
+    });
+
+    // Xác nhận vị trí trên bản đồ
+    document.getElementById('mapConfirm').addEventListener('click', async ()=>{
+      const { lat, lng } = marker.getLatLng();
+      lastCoords = { latitude: lat, longitude: lng };
+      updateInlineMapLinks(lastCoords);
+      try{
+        const address = await reverseGeocode(lat, lng);
+        cusLocation.value = address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        locHelp.textContent = 'Đã cập nhật địa chỉ từ vị trí bản đồ.';
+        const locSpan = document.getElementById('basicLoc');
+        if (locSpan) locSpan.textContent = cusLocation.value.trim();
+      }catch{
+        cusLocation.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        locHelp.textContent = 'Không thể chuyển toạ độ thành địa chỉ. Đã điền toạ độ thay thế.';
+        const locSpan = document.getElementById('basicLoc');
+        if (locSpan) locSpan.textContent = cusLocation.value.trim();
+      }
+      setGetLocationButtonState(true);
+
+      // Gửi cập nhật vị trí im lặng
+      try {
+        const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+        if (session.phone && session.deviceId) {
+          await fetch(WEB_APP_MAIN, {
+            method:'POST',
+            headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+              action: 'update_location',
+              phone: session.phone,
+              location: cusLocation.value.trim(),
+              deviceId: session.deviceId
+            })
+          });
+        }
+      } catch {}
+
+      // quay lại form khách hàng
+      document.getElementById('roleBox').hidden = true;
+      document.getElementById('mapBox').hidden = true;
+      document.getElementById('customerBox').hidden = false;
+      setTimeout(()=>cusLocation.focus(),0);
+    });
+
+    // ====== Prefill theo IP (tuỳ chọn) ======
+    async function prefillByIP(){
+      try{
+        const r = await fetch('https://ipapi.co/json/');
+        if(!r.ok) return;
+        const d = await r.json();
+        const approx = [d.city, d.region, d.country_name].filter(Boolean).join(', ');
+        if(approx && !cusLocation.value){
+          cusLocation.value = approx;
+          locHelp.textContent = 'Đã điền sơ bộ theo IP. Vui lòng kiểm tra và chỉnh lại nếu cần.';
+        }
+      }catch{}
+    }
+    roleCustomerBtn.addEventListener('click', prefillByIP);
+
+    // ====== Ping loop mỗi 5 phút ======
+    let pingTimer = null;
+    function schedulePingLoop() {
+      if (pingTimer) clearInterval(pingTimer);
+      pingTimer = setInterval(async ()=>{
+        const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+        if (!session.phone || !session.sessionId || !session.deviceId) {
+          clearInterval(pingTimer);
+          return;
+        }
+        try {
+          const pr = await (async function pingSessionWrap() {
+            const res = await fetch(WEB_APP_MAIN, {
+              method:'POST',
+              headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({
+                action:'ping_session',
+                phone: session.phone,
+                deviceId: session.deviceId,
+                sessionId: session.sessionId
+              })
+            });
+            const text = await res.text();
+            try { return JSON.parse(text); } catch { return { ok:false, status:'INVALID', message:text }; }
+          })();
+
+          if (pr.status !== 'ACTIVE') {
+            clearInterval(pingTimer);
+            if (pr.status === 'OTHER_DEVICE') {
+              showSessionBannerUI && showSessionBannerUI('Phiên của bạn đã bị thu hồi vì đăng nhập từ nơi khác.');
+            } else if (pr.status === 'EXPIRED') {
+              showSessionBannerUI && showSessionBannerUI('Phiên đã hết hạn. Vui lòng đăng nhập lại.');
+            } else if (pr.status === 'LOCKED') {
+              showSessionBannerUI && showSessionBannerUI('Số điện thoại này đang tạm bị khoá đăng nhập trong 24 giờ.');
+            }
+            localStorage.removeItem('odcg_customer');
+            if (typeof removeBasicCustomerInfo === 'function') removeBasicCustomerInfo();
+          } else {
+            // Cập nhật nhanh UI nếu customer thay đổi (ưu tiên mapUrl)
+            const nameEl = document.getElementById('basicName');
+            const phoneEl = document.getElementById('basicPhone');
+            const locEl = document.getElementById('basicLoc');
+            if (pr.customer) {
+              if (nameEl) nameEl.textContent = pr.customer.name || nameEl.textContent;
+              if (phoneEl) phoneEl.textContent = pr.customer.phone || phoneEl.textContent;
+
+              // location (text) có thể trống, vì ta ưu tiên mapUrl
+              if (locEl) locEl.textContent = pr.customer.location || locEl.textContent;
+
+              // cập nhật link "vị trí của bạn"
+              if (pr.customer.mapUrl) {
+                updateProfileMapLink({ href: pr.customer.mapUrl, show: true });
+              } else if (pr.customer.location) {
+                updateProfileMapLink({ href: composeMapHrefFromLocationString(pr.customer.location), show: true });
+              }
+            }
+            showSessionBannerUI && showSessionBannerUI('');
+          }
+        } catch (e) {
+          console.warn('ping loop error', e);
+        }
+      }, 5 * 60 * 1000); // 5 phút
+    }
+  </script>
+ 
