@@ -22,21 +22,54 @@
 </head>
 <body>
   <!-- HEADER -->
-  <div id="header-container"></div>
+  <header>
+    <div class="header-left">
+      <div class="logo-icon">
+        <img src="images/icon-512.png" alt="Logo Ở Đây Có Gì?" />
+      </div>
+      <div class="logo-text">
+        <h1>Ở Đây Có Gì?</h1>
+        <p class="slogan">Kết nối yêu thương</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="dang-ky.html?v=<?php echo time(); ?>" class="signup-button">📝 Đăng ký</a>
+      <a href="#" class="login-button" onclick="openPopup()">🔐 Đăng nhập</a>
+    </div>
+  </header>
 
   <!-- NỘI DUNG CHÍNH -->
   <main id="main-content">
-    <!-- Các section dịch vụ sẽ được render từ data/services.json -->
+    <section>
+      <h2>Dịch vụ yêu thích</h2>
+      <div class="grid">
+        <a href="bando.html" class="card">💸<p>Đặt xe</p></a>
+        <a href="trasua.html" class="card">🧾<p>Đặt nước</p></a>
+        <a href="lamdep.html" class="card">📷<p>Làm đẹp - Sức khỏe</p></a>
+        <a href="donTre.html" class="card">💳<p>Đón trẻ</p></a>
+        <a href="vanchuyen.html" class="card">🐷<p>Vận chuyển</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Giao hàng</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Tìm việc làm</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Rao vặt</p></a>
+        <a href="laodong.html" class="card">🛍️<p>Mở cửa hàng</p></a>
+      </div>
+    </section>
   </main>
 
   <!-- FOOTER -->
-  <div id="footer-container"></div>
+  <footer>
+    <p>© 2025 Ở Đây Có Gì? - Kết nối yêu thương</p>
+  </footer>
 
   <!-- POPUP -->
   <div id="popup-container"></div>
 
   <!-- BOTTOM NAV -->
-  <div id="bottom-nav-container"></div>
+  <nav class="bottom-nav">
+    <a href="index.html">🏠</a>
+    <a href="search.html">🔍</a>
+    <a href="profile.html">👤</a>
+  </nav>
 
   <!-- JS modules -->
   <script type="module" src="js/main.js"></script>
