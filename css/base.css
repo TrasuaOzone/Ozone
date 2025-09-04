@@ -1,44 +1,76 @@
-:root { /* Khai báo biến toàn cục để tái sử dụng trong toàn bộ CSS */
-  --red: #C62828; /* Màu đỏ chủ đạo của giao diện */
-  --red-dark: #B71C1C; /* Màu đỏ đậm hơn, dùng cho hover hoặc nhấn */
-  --light-red: #FFCDD2; /* Màu đỏ nhạt, thường dùng cho nền hoặc viền */
-  --bg: #FAFAFA; /* Màu nền tổng thể của trang */
-  --bottom-nav-pad: 64px; /* Khoảng đệm dưới để chừa chỗ cho thanh điều hướng */
-  --bottom-nav-min-h: 64px; /* Chiều cao tối thiểu của thanh điều hướng */
-  --field-br: 12px; /* Độ bo góc cho các ô nhập liệu và nút */
-  --field-bd: #E6E6E6; /* Màu viền mặc định của ô nhập liệu */
-} /* Kết thúc khối khai báo biến toàn cục */
+/* =========================
+   Base CSS – O Day Co Gi
+   ========================= */
 
-* { 
-  box-sizing: border-box; /* Tính cả padding và border vào kích thước tổng thể của phần tử */
-} /* Kết thúc khối áp dụng cho tất cả phần tử */
+/* Reset CSS cơ bản */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-html, body { /* Áp dụng chung cho cả thẻ <html> và <body> */
-  height: 100%; /* Chiều cao chiếm toàn bộ màn hình trình duyệt */
-  margin: 0; /* Xóa khoảng cách mặc định của trình duyệt */
-  font-family: 'Inter', sans-serif; /* Sử dụng font Inter, không chân (sans-serif) */
-  background: var(--bg); /* Màu nền lấy từ biến --bg */
-  color: #212121; /* Màu chữ xám đậm, dễ đọc trên nền sáng */
-  -webkit-text-size-adjust: 100%; /* Ngăn Safari tự động phóng to chữ trên iOS */
-  -webkit-tap-highlight-color: transparent; /* Xóa hiệu ứng highlight khi chạm trên thiết bị cảm ứng */
-  padding-bottom: var(--bottom-nav-pad); /* Chừa khoảng trống phía dưới để không bị thanh điều hướng che */
-  animation: pageFadeIn 0.4s ease-in; /* Áp dụng hiệu ứng mờ dần khi tải trang, thời gian 0.4 giây, kiểu ease-in */
-} /* Kết thúc khối quy tắc cho html, body */
+/* Biến toàn cục */
+:root {
+  --primary-color: #e53935; /* 🔴 Màu đỏ chủ đạo */
+  --secondary-color: #ffffff;
+  --text-color: #333333;
+  --bg-color: #f9f9f9;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --transition-speed: 0.3s;
+}
 
-@keyframes pageFadeIn { /* Định nghĩa hiệu ứng chuyển động khi tải trang */
-  from { 
-    opacity: 0; /* Bắt đầu trong suốt */
-    transform: translateY(6px); /* Dịch toàn bộ phần tử xuống 6px */
-  } /* Kết thúc trạng thái from */
-  to { 
-    opacity: 1; /* Hiện rõ hoàn toàn */
-    transform: translateY(0); /* Trở về vị trí ban đầu */
-  } /* Kết thúc trạng thái to */
-} /* Kết thúc khối định nghĩa keyframes pageFadeIn */
+/* Body mặc định */
+body {
+  font-family: var(--font-family);
+  font-size: 16px;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  line-height: 1.5;
+}
 
-section h2 { /* Áp dụng cho tiêu đề cấp 2 bên trong thẻ <section> */
-  font-size: 18px; /* Cỡ chữ 18px, vừa đủ nổi bật */
-  margin: 16px 12px 10px; /* Khoảng cách: trên 16px, trái/phải 12px, dưới 10px */
-  color: var(--red); /* Màu chữ đỏ chủ đạo từ biến --red */
-  font-family: 'Playfair Display', serif; /* Font chữ Playfair Display, có chân (serif) để tạo điểm nhấn */
-} /* Kết thúc khối quy tắc cho section h2 */
+/* Liên kết */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+a:hover {
+  color: #b71c1c; /* đỏ đậm hơn khi hover */
+}
+
+/* Tiêu đề */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* Nút */
+button {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+button:hover {
+  background-color: #b71c1c;
+}
+
+/* Input, textarea */
+input, textarea, select {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
