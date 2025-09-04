@@ -1,85 +1,107 @@
-.card { /* Thẻ dịch vụ (card) */
-  background: rgba(255,255,255,.75); /* Nền trắng mờ */
-  border-radius: 16px; /* Bo góc 16px */
-  padding: 14px 10px; /* Trên/dưới 14px, trái/phải 10px */
-  text-align: center; /* Căn giữa chữ */
-  box-shadow: 0 6px 12px rgba(0,0,0,.06); /* Đổ bóng nhẹ */
-  border: 1px solid var(--light-red); /* Viền đỏ nhạt */
-  transition: transform .15s; /* Hiệu ứng khi nhấn */
-  user-select: none; /* Không cho bôi đen chữ */
-  text-decoration: none; /* Xóa gạch chân */
-  color: inherit; /* Giữ nguyên màu chữ */
-  display: block; /* Hiển thị dạng block */
-  min-height: 88px; /* Chiều cao tối thiểu */
-} /* Kết thúc khối .card */
+/* =========================
+   Components CSS – O Day Co Gi
+   ========================= */
 
-.card:active { /* Khi nhấn vào card */
-  transform: translateY(2px); /* Dịch xuống 2px */
-} /* Kết thúc khối .card:active */
+/* ===== HEADER ===== */
+header {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.5rem 1rem;
+}
+header .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+header nav a {
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+header nav a:hover {
+  text-decoration: underline;
+}
 
-.card .emoji { /* Icon emoji trong card */
-  font-size: 22px; /* Cỡ emoji 22px */
-  display: block; /* Hiển thị dạng block */
-} /* Kết thúc khối .card .emoji */
+/* ===== FOOTER ===== */
+footer {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
 
-.card p { /* Văn bản mô tả trong card */
-  margin-top: 8px; /* Cách emoji 8px */
-  font-size: 14px; /* Cỡ chữ 14px */
-  font-weight: 600; /* Đậm vừa */
-} /* Kết thúc khối .card p */
+/* ===== POPUP ===== */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--secondary-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 1rem;
+  z-index: 1000;
+  max-width: 90%;
+}
+.popup-header {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.popup-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
 
-.signup-button,
-.login-button { /* Nút đăng ký và đăng nhập */
-  border-radius: 12px; /* Bo góc 12px */
-  padding: 12px 14px; /* Trên/dưới 12px, trái/phải 14px */
-  box-shadow: 0 4px 12px rgba(0,0,0,.08); /* Đổ bóng nhẹ */
-  font-weight: 600; /* Chữ đậm vừa */
-  font-size: 14px; /* Cỡ chữ 14px */
-  text-decoration: none; /* Xóa gạch chân */
-  display: inline-flex; /* Flex ngang */
-  align-items: center; /* Căn giữa dọc */
-  justify-content: center; /* Căn giữa ngang */
-  gap: 6px; /* Khoảng cách icon và chữ */
-  min-height: 44px; /* Chiều cao tối thiểu */
-  min-width: 120px; /* Chiều rộng tối thiểu */
-  border: 1px solid transparent; /* Viền trong suốt */
-  transition: background .2s, transform .1s, box-shadow .2s; /* Hiệu ứng hover/active */
-  cursor: pointer; /* Con trỏ dạng tay */
-} /* Kết thúc khối .signup-button, .login-button */
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--primary-color);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 0;
+}
+.bottom-nav a {
+  color: var(--secondary-color);
+  text-align: center;
+  font-size: 0.85rem;
+}
+.bottom-nav a:hover {
+  opacity: 0.8;
+}
 
-.signup-button { /* Nút đăng ký */
-  background: #FFEBEE; /* Nền hồng nhạt */
-  color: var(--red); /* Chữ đỏ */
-  border-color: var(--red); /* Viền đỏ */
-} /* Kết thúc khối .signup-button */
-
-.login-button { /* Nút đăng nhập */
-  background: var(--red); /* Nền đỏ */
-  color: #fff; /* Chữ trắng */
-} /* Kết thúc khối .login-button */
-
-.signup-button:active,
-.login-button:active { /* Khi nhấn nút đăng ký hoặc đăng nhập */
-  transform: translateY(1px); /* Dịch xuống 1px */
-} /* Kết thúc khối .signup-button:active, .login-button:active */
-
-.btn-primary { /* Nút chính */
-  background: var(--red); /* Nền đỏ */
-  color: #fff; /* Chữ trắng */
-  border: none; /* Không viền */
-  border-radius: 12px; /* Bo góc 12px */
-  padding: 12px; /* Đệm 12px */
-  font-weight: 700; /* Chữ đậm */
-  font-size: 15px; /* Cỡ chữ 15px */
-  cursor: pointer; /* Con trỏ dạng tay */
-  min-height: 44px; /* Chiều cao tối thiểu */
-  transition: background .15s, transform .05s, box-shadow .15s; /* Hiệu ứng hover/active */
-} /* Kết thúc khối .btn-primary */
-
-.btn-primary:hover { /* Khi rê chuột vào nút chính */
-  background: var(--red-dark); /* Đổi sang màu đỏ đậm */
-} /* Kết thúc khối .btn-primary:hover */
-
-.btn-primary:active { /* Khi nhấn nút chính */
-  transform: translateY(1px); /* Dịch xuống 1px */
-} /* Kết thúc khối .btn-primary:active */
+/* ===== SERVICE CARD ===== */
+.service-card {
+  background: var(--secondary-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  text-align: center;
+  transition: transform var(--transition-speed);
+}
+.service-card:hover {
+  transform: translateY(-4px);
+}
+.service-card img {
+  max-width: 60px;
+  margin-bottom: 0.5rem;
+}
+.service-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+.service-card p {
+  font-size: 0.85rem;
+  color: #666;
+}
