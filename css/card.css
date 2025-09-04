@@ -1,0 +1,36 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 0 12px 24px;
+}
+
+.card {
+  background: rgba(255,255,255,.75);
+  border-radius: 16px;
+  padding: 14px 10px;
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0,0,0,.06);
+  border: 1px solid var(--light-red);
+  transition: transform .15s;
+  user-select: none;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  min-height: 88px;
+}
+
+.card:active {
+  transform: translateY(2px);
+}
+
+.card .emoji {
+  font-size: 22px;
+  display: block;
+}
+
+.card p {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}

@@ -1,0 +1,38 @@
+:root {
+  --red: #C62828;
+  --red-dark: #B71C1C;
+  --light-red: #FFCDD2;
+  --bg: #FAFAFA;
+  --bottom-nav-pad: 64px;
+  --bottom-nav-min-h: 64px;
+  --field-br: 12px;
+  --field-bd: #E6E6E6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: #212121;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: var(--bottom-nav-pad);
+  animation: pageFadeIn 0.4s ease-in;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+section h2 {
+  font-size: 18px;
+  margin: 16px 12px 10px;
+  color: var(--red);
+  font-family: 'Playfair Display', serif;
+}

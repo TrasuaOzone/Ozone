@@ -1,0 +1,69 @@
+/* =========================
+   FOOTER + CONSENT + BANNER
+   ========================= */
+
+footer.site-footer {
+  margin: 24px 0 calc(var(--bottom-nav-pad) + 8px);
+  padding: 16px 12px;
+  color: #666;
+  font-size: 13px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.footer-links a {
+  color: var(--red);
+  font-weight: 700;
+  text-decoration: none;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* Consent checkbox */
+.consent {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  font-size: 13px;
+  color: #444;
+}
+.consent a {
+  color: var(--red);
+  font-weight: 700;
+  text-decoration: none;
+}
+.consent a:hover {
+  text-decoration: underline;
+}
+.consent input[type="checkbox"] {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--red);
+}
+.consent-error {
+  color: #B00020;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+
+/* Banner cảnh báo session */
+.session-banner {
+  display: none;
+  background: #FFF0F1;
+  border: 1px solid #FFC1C4;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin: 0 12px 12px;
+  color: #C62828;
+  font-size: 14px;
+}

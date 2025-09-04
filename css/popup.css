@@ -1,0 +1,71 @@
+/* =========================
+   OVERLAY & POPUP DIALOG
+   ========================= */
+
+/* Lớp phủ mờ toàn màn hình khi mở popup */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: none; /* Ẩn mặc định, chỉ hiện khi active */
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.overlay.active {
+  display: flex;
+}
+
+/* Khối dialog chung */
+.dialog {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+  position: relative;
+}
+
+/* Nút đóng popup */
+.close-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Tiêu đề vai trò */
+.role-title {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--red);
+}
+
+/* Mô tả vai trò */
+.role-subtitle {
+  font-size: 14px;
+  margin-bottom: 16px;
+  color: #555;
+}
+
+/* Nhóm nút chọn vai trò */
+.role-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.role-btn {
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--light-red);
+  background: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  text-align: left;
+}
+.role-btn:hover {
+  background: #FFF7F8;
+}
