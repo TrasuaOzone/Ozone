@@ -1,0 +1,119 @@
+<!-- OVERLAY: Lớp phủ mờ toàn màn hình khi mở popup -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogDesc">
+
+  <!-- DIALOG 1: Chọn vai trò -->
+  <div class="dialog" id="roleBox" hidden>
+    <!-- Nút đóng popup -->
+    <button class="close-btn" type="button" id="closeRole" aria-label="Đóng cửa sổ">
+      <span class="x" aria-hidden="true">✕</span>
+    </button>
+    <!-- Tiêu đề popup -->
+    <h2 class="role-title" id="dialogTitle">Chọn vai trò để tiếp tục</h2>
+    <!-- Mô tả ngắn -->
+    <p class="role-subtitle" id="dialogDesc">Vui lòng chọn vai trò phù hợp để chúng tôi điều hướng bạn đến đúng nơi.</p>
+    <!-- Nhóm nút chọn vai trò -->
+    <div class="role-actions">
+      <!-- Nút chọn vai trò khách hàng -->
+      <button type="button" id="roleCustomer" class="role-btn btn-customer" aria-label="Bạn là khách hàng">
+        <span aria-hidden="true">👤</span> Bạn là khách hàng
+      </button>
+      <!-- Nút chọn vai trò chuyên gia -->
+      <button type="button" id="roleExpert" class="role-btn btn-expert" aria-label="Bạn là chuyên gia">
+        <span aria-hidden="true">🧠</span> Bạn là chuyên gia
+      </button>
+    </div>
+    <!-- Ghi chú điều khoản -->
+    <p class="help" style="text-align:center;margin-top:10px;">
+      Khi tiếp tục, bạn chấp nhận
+      <a href="terms.html" target="_blank" rel="noopener">Điều khoản sử dụng</a> và
+      <a href="privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a>.
+    </p>
+  </div>
+
+  <!-- DIALOG 2: Đăng nhập khách hàng -->
+  <div class="dialog" id="customerBox" hidden aria-labelledby="customerTitle" aria-describedby="customerDesc">
+    <!-- Nút đóng popup -->
+    <button class="close-btn" type="button" id="closeCustomer" aria-label="Đóng cửa sổ">
+      <span class="x" aria-hidden="true">✕</span>
+    </button>
+    <!-- Tiêu đề -->
+    <h2 class="form-title" id="customerTitle">Đăng nhập khách hàng</h2>
+    <!-- Mô tả -->
+    <p class="form-desc" id="customerDesc">Nhập thông tin của bạn để tiếp tục sử dụng dịch vụ.</p>
+
+    <!-- Ô tìm kiếm địa chỉ nhanh (autocomplete) -->
+    <div class="field">
+      <label class="label" for="locSearch">Tìm nhanh địa chỉ</label>
+      <input class="input" type="text" id="locSearch" placeholder="Nhập tên đường, phường, quận, thành phố..." autocomplete="off" />
+      <!-- Khối gợi ý -->
+      <div id="locSuggest" class="suggest" style="display:none;">
+        <ul id="locList"></ul>
+      </div>
+      <span class="help">Chọn một gợi ý để điền địa chỉ ngay.</span>
+    </div>
+
+    <!-- Form đăng nhập -->
+    <form class="form" id="customerForm" novalidate>
+      <!-- Tên khách hàng -->
+      <div class="field">
+        <label class="label" for="cusName">Tên khách hàng</label>
+        <input class="input" type="text" id="cusName" name="name" placeholder="Nguyễn Văn A" autocomplete="name" required />
+      </div>
+
+      <!-- Số điện thoại -->
+      <div class="field">
+        <label class="label" for="cusPhone">Số điện thoại</label>
+        <input class="input" type="tel" id="cusPhone" name="phone" placeholder="09xx xxx xxx" inputmode="tel" autocomplete="tel" pattern="^0[0-9]{9,10}$" required />
+        <span class="help">Nhập số di động Việt Nam, bắt đầu bằng 0.</span>
+      </div>
+
+      <!-- Vị trí -->
+      <div class="field">
+        <label class="label" for="cusLocation">Vị trí</label>
+        <input class="input" type="text" id="cusLocation" name="location" placeholder="Phường/Quận/Thành phố" autocomplete="street-address" required />
+        <!-- Nhóm nút hành động vị trí -->
+        <div class="location-actions">
+          <button type="button" id="getLocationBtn" class="btn-secondary">📍 Lấy địa chỉ hiện tại</button>
+          <a id="viewMapLink" class="map-link" href="#" target="_blank" rel="noopener" aria-disabled="true">vị trí của bạn</a>
+          <button type="button" id="pickOnMapBtn" class="btn-secondary">🗺️ Chọn trên bản đồ</button>
+        </div>
+        <span class="help" id="locHelp">Cho phép quyền vị trí để tự động điền địa chỉ, hoặc chọn trên bản đồ.</span>
+      </div>
+
+      <!-- Đồng ý điều khoản -->
+      <div class="consent">
+        <input id="consentCustomer" type="checkbox" required aria-describedby="consentCustomerErr">
+        <label for="consentCustomer">
+          Tôi đồng ý <a href="terms.html" target="_blank" rel="noopener">Điều khoản sử dụng</a> và
+          <a href="privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a>.
+        </label>
+      </div>
+      <div id="consentCustomerErr" class="consent-error">Bạn cần đồng ý Điều khoản và Chính sách để tiếp tục.</div>
+
+      <!-- Nút submit -->
+      <div class="actions">
+        <button type="submit" class="btn-primary" id="customerLoginBtn">Đăng nhập</button>
+        <div class="note">Bằng cách tiếp tục, bạn đồng ý với điều khoản và chính sách của chúng tôi.</div>
+      </div>
+    </form>
+  </div>
+
+  <!-- DIALOG 3: Chọn vị trí trên bản đồ -->
+  <div class="dialog map-dialog" id="mapBox" hidden aria-labelledby="mapTitle">
+    <!-- Nút đóng -->
+    <button class="close-btn" type="button" id="closeMap" aria-label="Đóng bản đồ">
+      <span class="x" aria-hidden="true">✕</span>
+    </button>
+    <!-- Tiêu đề -->
+    <h2 class="form-title" id="mapTitle">Chọn vị trí trên bản đồ</h2>
+    <!-- Khung bản đồ -->
+    <div id="pickMap" role="application" aria-label="Bản đồ chọn vị trí"></div>
+    <!-- Nhóm nút hành động bản đồ -->
+    <div class="map-actions">
+      <button type="button" class="btn-outline" id="mapMyLoc">📍 Đưa ghim về vị trí của tôi</button>
+      <button type="button" class="btn-confirm" id="mapConfirm">Xác nhận vị trí</button>
+    </div>
+    <div class="help" id="mapHelp" style="margin-top:6px;">Kéo ghim đến vị trí mong muốn, sau đó bấm Xác nhận.</div>
+  </div>
+
+</div>
