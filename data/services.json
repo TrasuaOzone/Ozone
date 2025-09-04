@@ -1,1 +1,50 @@
-
+[
+  {
+    "category": "Dịch vụ yêu thích",
+    "items": [
+      { "icon": "icons/dat-xe.svg", "label": "Đặt xe", "link": "bando.html" },
+      { "icon": "icons/dat-nuoc.svg", "label": "Đặt nước", "link": "trasua.html" },
+      { "icon": "icons/lam-dep.svg", "label": "Làm đẹp - Sức khỏe", "link": "lamdep.html" },
+      { "icon": "icons/don-tre.svg", "label": "Đón trẻ", "link": "donTre.html" },
+      { "icon": "icons/van-chuyen.svg", "label": "Vận chuyển", "link": "vanchuyen.html" },
+      { "icon": "icons/giao-hang.svg", "label": "Giao hàng", "link": "laodong.html" },
+      { "icon": "icons/tim-viec.svg", "label": "Tìm việc làm", "link": "laodong.html" },
+      { "icon": "icons/rao-vat.svg", "label": "Rao vặt", "link": "laodong.html" },
+      { "icon": "icons/mo-cua-hang.svg", "label": "Mở cửa hàng", "link": "laodong.html" }
+    ]
+  },
+  {
+    "category": "Trà sữa",
+    "items": [
+      { "icon": "icons/trasua1.svg", "label": "Trà sữa 1", "link": "trasua1.html" },
+      { "icon": "icons/trasua2.svg", "label": "Trà sữa 2", "link": "trasua2.html" },
+      { "icon": "icons/trasua3.svg", "label": "Trà sữa 3", "link": "trasua3.html" },
+      { "icon": "icons/trasua4.svg", "label": "Trà sữa 4", "link": "trasua4.html" },
+      { "icon": "icons/trasua5.svg", "label": "Trà sữa 5", "link": "trasua5.html" },
+      { "icon": "icons/trasua6.svg", "label": "Trà sữa 6", "link": "trasua6.html" },
+      { "icon": "icons/trasua7.svg", "label": "Trà sữa 7", "link": "trasua7.html" },
+      { "icon": "icons/trasua8.svg", "label": "Trà sữa 8", "link": "trasua8.html" },
+      { "icon": "icons/trasua9.svg", "label": "Trà sữa 9", "link": "trasua9.html" },
+      { "icon": "icons/trasua10.svg", "label": "Trà sữa 10", "link": "trasua10.html" },
+      { "icon": "icons/trasua11.svg", "label": "Trà sữa 11", "link": "trasua11.html" },
+      { "icon": "icons/trasua12.svg", "label": "Trà sữa 12", "link": "trasua12.html" }
+    ]
+  },
+  {
+    "category": "Trà trái cây",
+    "items": [
+      { "icon": "icons/tratraicay1.svg", "label": "Trà trái cây 1", "link": "tratraicay1.html" },
+      { "icon": "icons/tratraicay2.svg", "label": "Trà trái cây 2", "link": "tratraicay2.html" },
+      { "icon": "icons/tratraicay3.svg", "label": "Trà trái cây 3", "link": "tratraicay3.html" },
+      { "icon": "icons/tratraicay4.svg", "label": "Trà trái cây 4", "link": "tratraicay4.html" },
+      { "icon": "icons/tratraicay5.svg", "label": "Trà trái cây 5", "link": "tratraicay5.html" },
+      { "icon": "icons/tratraicay6.svg", "label": "Trà trái cây 6", "link": "tratraicay6.html" },
+      { "icon": "icons/tratraicay7.svg", "label": "Trà trái cây 7", "link": "tratraicay7.html" },
+      { "icon": "icons/tratraicay8.svg", "label": "Trà trái cây 8", "link": "tratraicay8.html" },
+      { "icon": "icons/tratraicay9.svg", "label": "Trà trái cây 9", "link": "tratraicay9.html" },
+      { "icon": "icons/tratraicay10.svg", "label": "Trà trái cây 10", "link": "tratraicay10.html" },
+      { "icon": "icons/tratraicay11.svg", "label": "Trà trái cây 11", "link": "tratraicay11.html" },
+      { "icon": "icons/tratraicay12.svg", "label": "Trà trái cây 12", "link": "tratraicay12.html" }
+    ]
+  }
+]
