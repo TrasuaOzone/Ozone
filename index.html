@@ -22,6 +22,26 @@
       --bottom-nav-min-h:64px; --bottom-nav-pad:64px;
       --field-br:12px; --field-bd:#E6E6E6;
     }
+/* BẮT ĐẦU CHÈN - Canh chỉnh ô nhập trong dialog */
+.dialog form {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.form input,
+.expert-form input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* KẾT THÚC CHÈN */
+
     html,body{height:100%}
     body{
       margin:0; font-family:'Inter',sans-serif; background:var(--bg); color:#212121;
@@ -71,6 +91,61 @@
       border-radius:12px; min-height:44px; display:flex; align-items:center; justify-content:center; gap:6px;
     }
     .bottom-nav a:active{background:#FFEBEE}
+/* Form chuyên gia */
+.expert-dialog {
+  max-width: 400px;
+  width: 90%;
+  padding: 24px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.expert-dialog .form-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.expert-dialog .form-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.expert-form .form-group {
+  margin-bottom: 16px;
+}
+
+.expert-form label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.expert-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.expert-form input:focus {
+  border-color: #C62828;
+  box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.15);
+  outline: none;
+}
+
+.btn-primary.full-width {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+
 
     /* Footer + consent + banner */
     footer.site-footer { margin: 24px 0 calc(var(--bottom-nav-pad) + 8px); padding: 16px 12px; color: #666; font-size: 13px; text-align: center; }
@@ -195,6 +270,8 @@
      animation: shake 0.5s;
    }
    </style>
+
+
 
 </head>
 <body>
@@ -353,6 +430,8 @@
           <span class="help" id="locHelp">Cho phép quyền vị trí để tự động điền địa chỉ, hoặc chọn trên bản đồ.</span>
         </div>
 
+
+
         <!-- Đồng ý điều khoản & quyền riêng tư -->
         <div class="consent">
           <input id="consentCustomer" type="checkbox" required aria-describedby="consentCustomerErr">
@@ -369,6 +448,30 @@
         </div>
       </form>
     </div>
+
+<!-- Dialog: Đăng nhập chuyên gia -->
+<div class="dialog expert-dialog" id="expertBox" hidden aria-labelledby="expertTitle" aria-describedby="expertDesc">
+  <button class="close-btn" type="button" id="closeExpert" aria-label="Đóng cửa sổ">
+    <span class="x" aria-hidden="true">✕</span>
+  </button>
+  <h2 class="form-title" id="expertTitle">Đăng nhập chuyên gia</h2>
+  <p id="expertDesc" class="form-subtitle">Vui lòng nhập số điện thoại và mật khẩu để tiếp tục.</p>
+  <form id="expertForm" class="expert-form">
+    <div class="form-group">
+      <label for="expertPhone">Số điện thoại</label>
+      <input type="tel" id="expertPhone" name="expertPhone" pattern="^0[0-9]{9}$" required placeholder="Nhập số điện thoại" />
+    </div>
+
+    <div class="form-group">
+      <label for="expertPassword">Mật khẩu</label>
+      <input type="password" id="expertPassword" name="expertPassword" required placeholder="Nhập mật khẩu" />
+    </div>
+
+    <button type="submit" class="btn-primary full-width">Đăng nhập</button>
+  </form>
+</div>
+
+
 
     <!-- Dialog 3: Chọn vị trí trên bản đồ -->
     <div class="dialog map-dialog" id="mapBox" hidden aria-labelledby="mapTitle">
@@ -499,7 +602,34 @@
     overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeOverlay(); });
 
     roleCustomerBtn.addEventListener('click', showCustomerDialog);
-    roleExpertBtn.addEventListener('click', ()=>{ window.location.href = 'dang-nhap.html'; });
+
+// Mở form đăng nhập chuyên gia
+const expertBox = document.getElementById('expertBox');
+const closeExpertBtn = document.getElementById('closeExpert');
+const expertPhone = document.getElementById('expertPhone');
+
+roleExpertBtn.addEventListener('click', () => {
+  roleBox.hidden = true;
+  customerBox.hidden = true;
+  expertBox.hidden = false;
+  setTimeout(() => expertPhone.focus(), 100);
+});
+
+closeExpertBtn.addEventListener('click', () => {
+  expertBox.hidden = true;
+  overlay.classList.remove('active');
+  document.body.classList.remove('popup-active');
+});
+
+// Xử lý submit form chuyên gia
+document.getElementById('expertForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const phone = expertPhone.value.trim();
+  const password = document.getElementById('expertPassword').value.trim();
+  console.log('Đăng nhập chuyên gia:', phone, password);
+  // TODO: Gọi API đăng nhập chuyên gia tại đây
+});
+
 
     // Consent hide error
     consentCustomer.addEventListener('change', ()=>{
