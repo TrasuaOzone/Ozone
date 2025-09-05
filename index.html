@@ -185,6 +185,17 @@
     }
     @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   </style>
+  <style>
+   @keyframes shake {
+   0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+   }
+   .shake {
+     animation: shake 0.5s;
+   }
+   </style>
+
 </head>
 <body>
   <div id="main-content">
@@ -277,7 +288,7 @@
       <a href="taikhoan.html" aria-label="Tài khoản"><span class="emoji" aria-hidden="true">👤</span></a>
     </nav>
   </div>
-    <!-- Overlay + Dialogs -->
+  <!-- Overlay + Dialogs -->
   <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogDesc">
     <!-- Dialog 1: Chọn vai trò -->
     <div class="dialog" id="roleBox" hidden>
@@ -336,7 +347,7 @@
           <input class="input" type="text" id="cusLocation" name="location" placeholder="Phường/Quận/Thành phố" autocomplete="street-address" required />
           <div class="location-actions">
             <button type="button" id="getLocationBtn" class="btn-secondary">📍 Lấy địa chỉ hiện tại</button>
-            <a id="viewMapLink" class="map-link" href="#" target="_blank" rel="noopener" aria-disabled="true">xem vị trí của bạn</a>
+            <a id="viewMapLink" class="map-link" href="#" target="_blank" rel="noopener" aria-disabled="true">vị trí của bạn</a>
             <button type="button" id="pickOnMapBtn" class="btn-secondary">🗺️ Chọn trên bản đồ</button>
           </div>
           <span class="help" id="locHelp">Cho phép quyền vị trí để tự động điền địa chỉ, hoặc chọn trên bản đồ.</span>
@@ -373,12 +384,25 @@
       <div class="help" id="mapHelp" style="margin-top:6px;">Kéo ghim đến vị trí mong muốn, sau đó bấm Xác nhận.</div>
     </div>
   </div>
+<!-- Popup thông báo đăng nhập -->
+<div class="overlay" id="loginNoticeOverlay" style="display:none;">
+  <div class="dialog">
+    <button class="close-btn" type="button" id="closeLoginNotice" aria-label="Đóng thông báo">
+      <span class="x" aria-hidden="true">✕</span>
+    </button>
+    <h2 class="form-title">Quý khách vui lòng đăng nhập để tiếp tục</h2>
+    <div class="actions" style="margin-top:16px;">
+      <button type="button" class="btn-primary" id="loginNoticeBtn">Đăng nhập</button>
+    </div>
+  </div>
+</div>
+
 
   <!-- Scripts: core behaviors, login, profile render, session ping -->
   <script>
     // URLs
     const WEB_APP_MAIN = 'https://script.google.com/macros/s/AKfycbwfeWkWWGllDaAD0ZhARdJ1UvOYwDalBF1rYUKWeD3178lqEB5g5qTv0aIBFu3RqW4Z/exec'; // app chính
-    const WEB_APP_INFO = 'https://script.google.com/macros/s/AKfycbwommyBSaPLObHovbXqFPzLxfOfSWuixxDVU2T11Jqix6nD_v7JUpdmYTEV_Pred4o/exec'; // app thông tin KH
+    const WEB_APP_INFO = 'https://script.google.com/macros/s/AKfycbz89ganqrguJnrd9rbJQawgkhfGNQMuP3R1mE1Y774_J3_30c-QGGkDfYqWhR90lLoW/exec'; // app thông tin KH (fetch_by_phone)
 
     // Elements
     const bottomNav = document.getElementById('bottomNav');
@@ -522,8 +546,8 @@
       banner.style.display = 'block';
     }
 
-    // Render 3 trường + link ggmap rút gọn ("vị trí của bạn") + Logout
-    function renderBasicCustomerInfo({ name, phone, location }) {
+    // Render 3 trường + link "vị trí của bạn" (ưu tiên mapUrl) + Logout
+    function renderBasicCustomerInfo({ name, phone, location, mapUrl }) {
       let box = document.getElementById('customerBasic');
       if (!box) {
         box = document.createElement('section');
@@ -552,7 +576,10 @@
       document.getElementById('basicLoc').textContent = location || '';
 
       const map = document.getElementById('basicMap');
-      if (location) {
+      if (mapUrl) {
+        map.href = mapUrl;
+        map.style.display = '';
+      } else if (location) {
         map.href = `https://maps.google.com/?q=${encodeURIComponent(location)}`;
         map.style.display = '';
       } else {
@@ -571,12 +598,12 @@
       setAuthButtonsVisibility(false);
     }
 
-    // WEB APP INFO: lấy 3 trường theo SĐT
+    // WEB APP INFO: lấy 3 trường theo SĐT (trả { ok, customer: {name, phone, location, mapUrl} })
     async function fetchCustomerInfoByPhone(phone) {
       return postFormJSON(WEB_APP_INFO, { action:'fetch_by_phone', phone });
     }
 
-    // LOGIN: chấp nhận JSON hoặc TEXT, đóng popup ngay và render UI, ghi ggmap link dạng rút gọn "vị trí của bạn"
+    // LOGIN: chấp nhận JSON hoặc TEXT, đóng popup ngay và render UI (ưu tiên mapUrl)
     async function loginUser({ name, phone, location, deviceId }) {
       const res = await fetch(WEB_APP_MAIN, {
         method:'POST',
@@ -621,16 +648,16 @@
           return;
         }
 
-        const customer = result.customer || { name, phone, location: loc, updatedAt: '' };
+        const customer = result.customer || { name, phone, location: loc, mapUrl: '', updatedAt: '' };
         localStorage.setItem('odcg_customer', JSON.stringify({
           name: customer.name, phone: customer.phone, location: customer.location,
-          updatedAt: customer.updatedAt || '',
+          mapUrl: customer.mapUrl || '', updatedAt: customer.updatedAt || '',
           sessionId: result.sessionId, deviceId, t: Date.now()
         }));
 
         // Đóng popup và render hồ sơ ngay
         closeOverlay();
-        renderBasicCustomerInfo({ name: customer.name, phone: customer.phone, location: customer.location });
+        renderBasicCustomerInfo({ name: customer.name, phone: customer.phone, location: customer.location, mapUrl: customer.mapUrl });
 
         // Lấy lại info từ web app info (không chặn UI)
         try {
@@ -639,7 +666,8 @@
             renderBasicCustomerInfo({
               name: infoRes.customer.name || customer.name,
               phone: infoRes.customer.phone || customer.phone,
-              location: infoRes.customer.location || customer.location
+              location: infoRes.customer.location || customer.location,
+              mapUrl: infoRes.customer.mapUrl || customer.mapUrl
             });
           }
         } catch {}
@@ -695,7 +723,8 @@
           renderBasicCustomerInfo({
             name: pr.customer?.name || session.name,
             phone: pr.customer?.phone || session.phone,
-            location: pr.customer?.location || session.location
+            location: pr.customer?.location || session.location,
+            mapUrl: pr.customer?.mapUrl || session.mapUrl
           });
           showSessionBannerUI('');
           if (typeof schedulePingLoop === 'function') schedulePingLoop();
@@ -741,19 +770,34 @@
     let lastCoords = null;
     let gettingLoc = false;
 
-    function updateMapLink(coords){
-      const { latitude, longitude } = coords;
-      const href = `https://maps.google.com/?q=${latitude},${longitude}`;
+    function composeMapHrefFromLocationString(locStr){
+      return locStr ? `https://maps.google.com/?q=${encodeURIComponent(locStr)}` : '#';
+    }
+
+    function updateProfileMapLink({ href, show }) {
+      const basicMap = document.getElementById('basicMap');
+      if (!basicMap) return;
+      if (show && href) {
+        basicMap.href = href;
+        basicMap.style.display = '';
+      } else {
+        basicMap.href = '#';
+        basicMap.style.display = 'none';
+      }
+    }
+
+    function updateInlineMapLinks(coords){
+      // Update link in login form
       const link = document.getElementById('viewMapLink');
-      if (link) {
+      if (link && coords) {
+        const href = `https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
         link.href = href;
         link.setAttribute('aria-disabled','false');
       }
-      // Đồng bộ link "vị trí của bạn" trong hồ sơ nếu có
-      const basicMap = document.getElementById('basicMap');
-      if (basicMap) {
-        basicMap.href = href;
-        basicMap.style.display = '';
+      // Update link in profile block
+      if (coords) {
+        const href = `https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
+        updateProfileMapLink({ href, show: true });
       }
     }
 
@@ -797,14 +841,13 @@
         });
 
         lastCoords = { latitude: coords.latitude, longitude: coords.longitude };
-        updateMapLink(lastCoords);
+        updateInlineMapLinks(lastCoords);
 
         try{
           const address = await reverseGeocode(lastCoords.latitude, lastCoords.longitude);
           if(address) {
             cusLocation.value = address;
             locHelp.textContent = 'Đã tự động điền địa chỉ của bạn. Kiểm tra lại cho chính xác.';
-            // Cập nhật hồ sơ nếu đang hiển thị
             const locSpan = document.getElementById('basicLoc');
             if (locSpan) locSpan.textContent = address;
           } else {
@@ -838,11 +881,9 @@
         alert('Không thể lấy vị trí. Kiểm tra quyền truy cập vị trí hoặc dùng “Chọn trên bản đồ”.');
         setGetLocationButtonState(!!lastCoords);
         const link = document.getElementById('viewMapLink');
-        if(link){
-          if(!lastCoords){
-            link.setAttribute('aria-disabled','true');
-            link.href = '#';
-          }
+        if(link && !lastCoords){
+          link.setAttribute('aria-disabled','true');
+          link.href = '#';
         }
         locHelp.textContent = 'Bạn có thể nhập địa chỉ hoặc chọn trên bản đồ nếu không cấp quyền vị trí.';
       }finally{
@@ -854,7 +895,7 @@
     }
     getLocationBtn.addEventListener('click', handleGetLocation);
 
-    // Khi người dùng sửa tay địa chỉ, nếu chưa có toạ độ thì vô hiệu map link
+    // Khi người dùng sửa tay địa chỉ, nếu chưa có toạ độ thì vô hiệu map link trong form
     cusLocation.addEventListener('input', ()=>{
       if(!lastCoords){
         const link = document.getElementById('viewMapLink');
@@ -912,13 +953,13 @@
         li.addEventListener('click', async ()=>{
           cusLocation.value = item.display_name || '';
           lastCoords = { latitude: parseFloat(item.lat), longitude: parseFloat(item.lon) };
-          updateMapLink(lastCoords);
+          updateInlineMapLinks(lastCoords);
           setGetLocationButtonState(true);
           locSuggest.style.display = 'none';
           locList.innerHTML = '';
-          locHelp.textContent = 'Đã chọn địa chỉ từ gợi ý. Bạn có thể “vị trí của bạn” để kiểm tra.';
+          locHelp.textContent = 'Đã chọn địa chỉ từ gợi ý. Bạn có thể bấm “vị trí của bạn” để kiểm tra.';
 
-          // Đồng bộ "vị trí của bạn" trong hồ sơ
+          // Đồng bộ hiển thị hồ sơ
           const locSpan = document.getElementById('basicLoc');
           if (locSpan) locSpan.textContent = cusLocation.value.trim();
 
@@ -1016,7 +1057,7 @@
     document.getElementById('mapConfirm').addEventListener('click', async ()=>{
       const { lat, lng } = marker.getLatLng();
       lastCoords = { latitude: lat, longitude: lng };
-      updateMapLink(lastCoords);
+      updateInlineMapLinks(lastCoords);
       try{
         const address = await reverseGeocode(lat, lng);
         cusLocation.value = address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
@@ -1108,25 +1149,22 @@
             localStorage.removeItem('odcg_customer');
             if (typeof removeBasicCustomerInfo === 'function') removeBasicCustomerInfo();
           } else {
-            // Cập nhật nhanh UI nếu customer thay đổi
+            // Cập nhật nhanh UI nếu customer thay đổi (ưu tiên mapUrl)
             const nameEl = document.getElementById('basicName');
             const phoneEl = document.getElementById('basicPhone');
             const locEl = document.getElementById('basicLoc');
             if (pr.customer) {
               if (nameEl) nameEl.textContent = pr.customer.name || nameEl.textContent;
               if (phoneEl) phoneEl.textContent = pr.customer.phone || phoneEl.textContent;
-              if (locEl) {
-                locEl.textContent = pr.customer.location || locEl.textContent;
-                const map = document.getElementById('basicMap');
-                if (map) {
-                  if (pr.customer.location) {
-                    map.href = `https://maps.google.com/?q=${encodeURIComponent(pr.customer.location)}`;
-                    map.style.display = '';
-                  } else {
-                    map.href = '#';
-                    map.style.display = 'none';
-                  }
-                }
+
+              // location (text) có thể trống, vì ta ưu tiên mapUrl
+              if (locEl) locEl.textContent = pr.customer.location || locEl.textContent;
+
+              // cập nhật link "vị trí của bạn"
+              if (pr.customer.mapUrl) {
+                updateProfileMapLink({ href: pr.customer.mapUrl, show: true });
+              } else if (pr.customer.location) {
+                updateProfileMapLink({ href: composeMapHrefFromLocationString(pr.customer.location), show: true });
               }
             }
             showSessionBannerUI && showSessionBannerUI('');
@@ -1136,5 +1174,74 @@
         }
       }, 5 * 60 * 1000); // 5 phút
     }
+// ===== TỰ ĐỘNG GẮN protected-card CHO TẤT CẢ .card =====
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.card').forEach(card => {
+    if (!card.classList.contains('protected-card')) {
+      card.classList.add('protected-card');
+    }
+  });
+});
+
+// ===== HÀM KIỂM TRA ĐĂNG NHẬP =====
+function isLoggedIn() {
+  const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+  return !!(session && session.sessionId);
+}
+
+// ===== CHẶN CLICK NẾU CHƯA ĐĂNG NHẬP =====
+document.addEventListener('click', function (e) {
+  const card = e.target.closest('.protected-card');
+  if (card && !isLoggedIn()) {
+    e.preventDefault();
+    e.stopPropagation();
+    // Mở form đăng nhập khách hàng
+    showCustomerDialog();
+    // Rung form
+    const customerBox = document.getElementById('customerBox');
+    customerBox.classList.add('shake');
+    setTimeout(() => customerBox.classList.remove('shake'), 500);
+    // Focus ô SĐT
+    setTimeout(() => {
+      const phoneInput = document.getElementById('cusPhone');
+      if (phoneInput) phoneInput.focus();
+    }, 100);
+  }
+});
+  // BẮT ĐẦU CHÈN
+  // ===== Popup thông báo đăng nhập =====
+  const loginNoticeOverlay = document.getElementById('loginNoticeOverlay');
+  const closeLoginNotice = document.getElementById('closeLoginNotice');
+  const loginNoticeBtn = document.getElementById('loginNoticeBtn');
+
+  function showLoginNotice() {
+    loginNoticeOverlay.style.display = 'flex';
+  }
+  function closeLoginNoticePopup() {
+    loginNoticeOverlay.style.display = 'none';
+  }
+
+  closeLoginNotice.addEventListener('click', closeLoginNoticePopup);
+  loginNoticeBtn.addEventListener('click', () => {
+    closeLoginNoticePopup();
+    loginBtn.click(); // Gọi hành vi nút đăng nhập ở header
+  });
+
+  // ===== Kiểm tra đăng nhập =====
+  function isLoggedIn() {
+    const session = JSON.parse(localStorage.getItem('odcg_customer') || '{}');
+    return !!(session && session.sessionId);
+  }
+
+  // ===== Chặn click card nếu chưa đăng nhập =====
+  document.addEventListener('click', function (e) {
+    const card = e.target.closest('.card');
+    if (card && !isLoggedIn()) {
+      e.preventDefault();
+      e.stopPropagation();
+      showLoginNotice();
+    }
+  });
+ 
   </script>
  
