@@ -2,6 +2,10 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
+<!-- BẮT ĐẦU CHÈN - Font Awesome cho icon con mắt -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- KẾT THÚC CHÈN -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Ở Đây Có Gì?</title>
   <meta name="description" content="Ở Đây Có Gì? — Kết nối yêu thương: đặt xe, đồ uống, làm đẹp, vận chuyển, việc làm và nhiều dịch vụ tiện ích khác." />
@@ -145,6 +149,30 @@
   font-size: 1rem;
   border-radius: 6px;
 }
+/* BẮT ĐẦU CHÈN - Con mắt ẩn/hiện mật khẩu */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.toggle-password:hover {
+  color: #C62828;
+}
+/* KẾT THÚC CHÈN */
+
 
 
     /* Footer + consent + banner */
@@ -464,7 +492,13 @@
 
     <div class="form-group">
       <label for="expertPassword">Mật khẩu</label>
-      <input type="password" id="expertPassword" name="expertPassword" required placeholder="Nhập mật khẩu" />
+      <div class="password-wrapper">
+  <input type="password" id="expertPassword" name="expertPassword" required placeholder="Nhập mật khẩu" />
+  <span class="toggle-password" aria-label="Hiện/ẩn mật khẩu">
+    <i class="fa fa-eye"></i>
+  </span>
+</div>
+
     </div>
 
     <button type="submit" class="btn-primary full-width">Đăng nhập</button>
@@ -1372,6 +1406,22 @@ document.addEventListener('click', function (e) {
       showLoginNotice();
     }
   });
+// BẮT ĐẦU CHÈN - Toggle mật khẩu chuyên gia
+document.querySelector('.toggle-password').addEventListener('click', function () {
+  const input = document.getElementById('expertPassword');
+  const icon = this.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+});
+// KẾT THÚC CHÈN
+
  
   </script>
  
