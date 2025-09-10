@@ -704,7 +704,7 @@ document.getElementById('job').addEventListener('change', function() {
   switch (this.value) {
     case 'driver':
       extraFields.innerHTML = `
-        <label>Loại phương tiện</label>
+        <label></label>
         <select name="vehicleType" required>
           <option value="">-- Chọn loại phương tiện --</option>
           <option value="car">Xe ô tô</option>
@@ -712,7 +712,7 @@ document.getElementById('job').addEventListener('change', function() {
           <option value="truck">Vận tải</option>
         </select>
 
-        <label>Bằng lái</label>
+        <label></label>
         <select name="licenseType" required>
           <option value="">-- Chọn loại bằng lái --</option>
           <option value="B1">B1</option>
@@ -1720,3 +1720,4 @@ document.querySelector('.toggle-password').addEventListener('click', function ()
  
   </script>
  
+
